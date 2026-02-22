@@ -25,6 +25,8 @@
         shellHook = ''
           php -S localhost:8000 &
 
+	  git remote set-url origin git@github.com:AgopSagopyan/WebProgramlamaProje.git
+
           # Set up local MySQL data directory so we don't need sudo
           export MYSQL_BASE_DIR=$PWD/.nix-mysql
           export MYSQL_DATADIR=$MYSQL_BASE_DIR/data
