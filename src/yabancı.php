@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="./output.css" rel="stylesheet">
+    <title>Etkinlikler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6">
-
-  
+<body class="bg-gray-100">
     <header class="relative w-full h-[450px] overflow-hidden mb-12">
     <div class="absolute inset-0 w-full h-full">
         <img src="../img/sinema.png" 
@@ -27,7 +24,9 @@
 
             <div class="hidden md:flex space-x-8">
                 <a href="#ana-sayfa" class="text-white hover:text-blue-400 font-semibold transition duration-300">Ana Sayfa</a>
-                <a href="#filmler" class="text-white hover:text-blue-400 font-semibold transition duration-300">Yerli</a>
+                <a href="baba.php" class="hover:text-blue-300 text-white">
+                    Yerli
+                </a>
                 <a href="yabancı.php" class="hover:text-blue-300 text-white">
                         Yabancı
                  </a>
@@ -148,7 +147,7 @@
     <div class="w-96 bg-white rounded-lg shadow-lg overflow-hidden">
 
         <!-- Fotoğraf -->
-        <img src="../img/maymun.png"
+        <img src=""
              alt="Film Resmi"
              class="w-full h-80 object-cover">
 
@@ -171,23 +170,11 @@
     </div>
 
     <div class="w-96 bg-white rounded-lg shadow-lg overflow-hidden flex-shrink-0">
-            <img src="../img/images.png"
+            <img src=""
                  alt="Film Resmi"
                  class="w-full h-80 object-cover">
             <div class="p-6 border-t border-gray-200">
-                <h2 class="text-2xl font-bold text-gray-800">
-                    <?php
-                            require_once "database.php";  
-                            
-                            $sql = "SELECT movieName FROM Film";
-                            $stmt = $pdo->query($sql);
-                            
-                            while($row = $stmt->fetch()) {
-                                echo $row['movieName'];
-                            }
-
-                    ?>
-                </h2>
+                <h2 class="text-2xl font-bold text-gray-800">Five Nights At Davut's</h2>
                 <p class="text-sm text-gray-500 mt-2">Korku • 120 Dakika • 2025</p>
                 <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-3 rounded-lg w-full">
                     Rezervasyon Yap
@@ -199,5 +186,9 @@
 
 
     
+</body>
+</html>
+    
+
 </body>
 </html>
