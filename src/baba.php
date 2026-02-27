@@ -10,7 +10,7 @@
   
     <header class="relative w-full h-[450px] overflow-hidden mb-12">
     <div class="absolute inset-0 w-full h-full">
-        <img src="sinema.png" 
+        <img src="../img/sinema.png" 
              alt="Header Background" 
              class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-black/50"></div>
@@ -54,7 +54,7 @@
     <div class="w-96 bg-white rounded-lg shadow-lg overflow-hidden">
 
         <!-- Fotoğraf -->
-        <img src="maymun.png"
+        <img src="../img/maymun.png"
              alt="Film Resmi"
              class="w-full h-80 object-cover">
 
@@ -77,7 +77,7 @@
     </div>
 
     <div class="w-96 bg-white rounded-lg shadow-lg overflow-hidden flex-shrink-0">
-            <img src="images.png"
+            <img src="../img/images.png"
                  alt="Film Resmi"
                  class="w-full h-80 object-cover">
             <div class="p-6 border-t border-gray-200">
