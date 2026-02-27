@@ -5,7 +5,10 @@
   env.GREET = "devenv";
 
   # https://devenv.sh/packages/
-  packages = [ pkgs.git ];
+  packages = [ 
+    pkgs.git 
+    pkgs.tailwindcss
+  ];
 
   # https://devenv.sh/languages/
   # languages.rust.enable = true;
@@ -48,7 +51,15 @@
     enable = true;
   };
 
+  languages.javascript = {
+    enable = true;
+    npm.enable = true;
+  };
+
+
   processes.php-server.exec = "php -S localhost:8000";
+
+  processes.tailwind.exec = "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch";
 
   services.mysql = {
     enable = true;
