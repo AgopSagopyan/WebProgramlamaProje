@@ -176,7 +176,19 @@
                  alt="Film Resmi"
                  class="w-full h-80 object-cover">
             <div class="p-6 border-t border-gray-200">
-                <h2 class="text-2xl font-bold text-gray-800">Five Nights At Davut's</h2>
+                <h2 class="text-2xl font-bold text-gray-800">
+                    <?php
+                            require_once "database.php";  
+                            
+                            $sql = "SELECT movieName FROM Film";
+                            $stmt = $pdo->query($sql);
+                            
+                            while($row = $stmt->fetch()) {
+                                echo $row['movieName'];
+                            }
+
+                    ?>
+                </h2>
                 <p class="text-sm text-gray-500 mt-2">Korku • 120 Dakika • 2025</p>
                 <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-3 rounded-lg w-full">
                     Rezervasyon Yap
