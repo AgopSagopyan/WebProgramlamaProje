@@ -31,8 +31,9 @@
                 <a href="yabancı.php" class="hover:text-blue-300 text-white">
                         Yabancı
                  </a>
-                <a href="#hakkimizda" class="text-white hover:text-blue-400 font-semibold transition duration-300">Hakkımızda</a>
-                <a href="#iletisim" class="text-white hover:text-blue-400 font-semibold transition duration-300">İletişim</a>
+                <a href="hakkımızda.php" class="hover:text-blue-300 text-white">
+                    Hakkımızda & İletişim
+                </a>
             </div>
 
             <button id= "menuBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition shadow-lg">
