@@ -43,10 +43,14 @@ try {
 
 $sql = "SELECT movieName FROM Film;";
 
+try {
+    // We iterate directly over the result set
+    foreach ($pdo->query($sql) as $row) {
+        echo "<br>" . $row['movieName'] . "<br>";
+    }
+} catch (PDOException $e) {
+    echo "Query failed: " . $e->getMessage();
+}
 
-
-$results = $pdo->query($sql);
-
-    echo $results;
 ?>
 </html>
