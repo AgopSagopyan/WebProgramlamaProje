@@ -28,6 +28,17 @@
   enterShell = ''
     hello         # Run scripts directly
     git --version # Use packages
+
+    # 1. Ensure our custom db folder exists
+    mkdir -p "$DEVENV_ROOT/db/mysql"
+
+    # 2. If the default devenv mysql dir doesn't exist yet, link it to our /db
+    # This redirects the service to your project folder
+    if [ ! -L "$DEVENV_STATE/mysql" ]; then
+      ln -s "$DEVENV_ROOT/db/mysql" "$DEVENV_STATE/mysql"
+      echo "🔗 Linked MySQL data to ./db/mysql"
+    fi
+
   '';
 
   # https://devenv.sh/tasks/
@@ -59,10 +70,12 @@
 
   processes.php-server.exec = "php -S localhost:8000";
 
-  processes.tailwind.exec = "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch";
+  processes.tailwind.exec = "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch";
 
   services.mysql = {
     enable = true;
+        
+
     package = pkgs.mariadb;
     initialDatabases = [{ name = "denemeDB"; }];
 

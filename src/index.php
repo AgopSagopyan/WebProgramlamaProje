@@ -1,6 +1,6 @@
 <html>
     <head>
-       <link href="output.css" rel="stylesheet"> 
+       <link href="./src/output.css" rel="stylesheet"> 
     </head>
 <body class="bg-slate-900 flex items-center justify-center min-h-screen p-6">
 
@@ -30,7 +30,7 @@
 </body>
 <?php
 $host = '127.0.0.1';
-$db   = 'my_app';
+$db   = 'denemeDB';
 $user = 'root';
 $pass = ''; // Default devenv mysql has no password
 
@@ -40,5 +40,13 @@ try {
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
+
+$sql = "SELECT movieName FROM Film;";
+
+
+
+$results = $pdo->query($sql);
+
+    echo $results;
 ?>
 </html>
