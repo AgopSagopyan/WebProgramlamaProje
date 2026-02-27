@@ -143,7 +143,96 @@
     </div>
 </header>
 
+<?php
+
+    require_once "database.php";
+// 1. Assuming you already have your $pdo connection established...
+
+// 2. Fetch the movies
+$query = $pdo->query("SELECT movieName, movieGenre FROM Film");
+
+// 3. Start the Grid Container (Optional but recommended for layout)
+echo '<div class="flex flex-wrap gap-6 justify-center p-10">';
+
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    ?>
+    <div class="w-96 bg-white rounded-lg shadow-lg overflow-hidden">
+
+        <img src="<?php echo "nigga"; ?>" 
+             alt="Film Resmi" 
+             class="w-full h-80 object-cover">
+
+        <div class="p-6 border-t border-gray-200">
+
+            <h2 class="text-2xl font-bold text-gray-800">
+                <?php echo htmlspecialchars($row['movieName']); ?>
+            </h2>
+
+            <p class="text-sm text-gray-500 mt-2">
+                <?php echo "{$row['movieGenre']}"; ?>
+            </p>
+
+            <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-3 rounded-lg w-full">
+                Rezervasyon Yap
+            </button>
+
+        </div>
+
+    </div>
+    <?php
+}
+
+echo '</div>'; // End Grid Container
+?>
+
     <div class="flex gap-6 justify-start">
+
+        <!-- Kart -->
+    <div class="w-96 bg-white rounded-lg shadow-lg overflow-hidden">
+
+        <!-- Fotoğraf -->
+        <img src="../img/maymun.png"
+             alt="Film Resmi"
+             class="w-full h-80 object-cover">
+
+        <!-- Çerçeve -->
+        <div class="p-6 border-t border-gray-200">
+
+            <!-- Film İsmi -->
+            <h2 class="text-2xl font-bold text-gray-800">
+            
+<?php
+    require_once "database.php";
+
+                            $sql = "SELECT movieName FROM Film";
+    $stmt = $pdo->query($sql);
+
+     while ($row = $stmt->fetch()) {
+    // 4. Create the Card for every line
+    echo "
+    <div class='card'>
+        <div class='container'>
+            <h4><b>{$row['movieName']}</b></h4>
+        </div>
+    </div>
+    ";
+                            }
+?>
+            </h2>
+
+            <!-- Küçük Açıklama -->
+            <p class="text-sm text-gray-500 mt-2">Komedi • 90 Dakika • 2026</p>
+
+            <!-- Rezervasyon Butonu -->
+            <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-3 rounded-lg w-full">
+                Rezervasyon Yap
+            </button>
+
+        </div>
+
+    </div>
+
+
 
         <!-- Kart -->
     <div class="w-96 bg-white rounded-lg shadow-lg overflow-hidden">
@@ -186,6 +275,7 @@
                             while($row = $stmt->fetch()) {
                                 echo $row['movieName'];
                             }
+
 
                     ?>
                 </h2>
