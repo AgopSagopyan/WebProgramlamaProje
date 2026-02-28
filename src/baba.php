@@ -25,6 +25,13 @@
                 DAVUT<span class="text-blue-500 underline">SİNEMALARI</span>
             </h1>
 
+        <div class="mt-15 ml-12">
+    <a href="uyeol.php"
+       class="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:scale-105 hover:bg-blue-700 transition">
+        Üye Ol
+    </a>
+</div>
+
             <div class="hidden md:flex space-x-8">
                 <a href="#ana-sayfa" class="text-white hover:text-blue-400 font-semibold transition duration-300">Ana Sayfa</a>
                 <a href="#filmler" class="text-white hover:text-blue-400 font-semibold transition duration-300">Yerli</a>
@@ -42,10 +49,9 @@
         </nav>
 
         <!-- Menü paneli -->
-<div id="sideMenu"
-     class="fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
-
-    <div class="p-6">
+                <div id="sideMenu"
+                class="fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+                <div class="p-6">
 
         <!-- Kapat Butonu -->
         <button id="closeBtn"
