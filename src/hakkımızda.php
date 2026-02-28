@@ -25,9 +25,13 @@
                         İsim Soyisim
                     </label>
                     <input type="text"
-                        name="isim"
+                        id="isim"
                         class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Adınız Soyadınız">
+
+                  <p id="isimError" class="text-red-500 text-sm mt-1 hidden">
+        Sadece harf kullanabilirsiniz.
+     </p>
                 </div>
 
                 <!-- Mail -->
@@ -36,9 +40,14 @@
                         Mail Adresi
                     </label>
                     <input type="email"
-                        name="mail"
+                        id="mail"
                         class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="ornek@mail.com">
+
+                 <p id="mailError" class="text-red-500 text-sm mt-1 hidden">
+        Geçerli bir mail adresi giriniz.
+    </p>
+
                 </div>
 
                 <!-- Telefon -->
@@ -47,16 +56,26 @@
                         Telefon Numarası
                     </label>
                     <input type="tel"
-                        name="telefon"
+                        id="telefon"
                         class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="05xx xxx xx xx">
+
+                      <p id="telefonError" class="text-red-500 text-sm mt-1 hidden">
+        Sadece rakam giriniz (10-11 hane).
+    </p>
                 </div>
 
                 <!-- Buton -->
-                <button type="submit"
+                <button type="button"
+                id="submitBtn"
                     class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
                     Gönder
                 </button>
+
+                <!-- Mesaj Kutusu -->
+                <div id="toast"
+                class="fixed top-5 right-5 px-6 py-4 rounded-lg shadow-lg text-white hidden transition duration-300">
+                </div>
 
           <!-- HAKKIMIZDA -->
 <div class="mt-auto border-t border-gray-700 py-6">
@@ -78,6 +97,94 @@
 
     </div>
 </div>
+    
+    <script>
+const isimInput = document.getElementById("isim");
+const isimError = document.getElementById("isimError");
+
+const telefonInput = document.getElementById("telefon");
+const telefonError = document.getElementById("telefonError");
+
+const mailInput = document.getElementById("mail");
+const mailError = document.getElementById("mailError");
+
+const submitBtn = document.getElementById("submitBtn");
+const toast = document.getElementById("toast");
+
+// İSİM KONTROL
+isimInput.addEventListener("input", () => {
+    const regex = /^[A-Za-zğüşöçıİĞÜŞÖÇ\s]+$/;
+
+    if (!regex.test(isimInput.value)) {
+        isimInput.classList.remove("border-gray-700");
+        isimInput.classList.add("border-red-500");
+        isimError.classList.remove("hidden");
+    } else {
+        isimInput.classList.remove("border-red-500");
+        isimInput.classList.add("border-green-500");
+        isimError.classList.add("hidden");
+    }
+});
+
+// TELEFON KONTROL
+telefonInput.addEventListener("input", () => {
+    const regex = /^[0-9]{10,11}$/;
+
+    if (!regex.test(telefonInput.value)) {
+        telefonInput.classList.remove("border-gray-700");
+        telefonInput.classList.add("border-red-500");
+        telefonError.classList.remove("hidden");
+    } else {
+        telefonInput.classList.remove("border-red-500");
+        telefonInput.classList.add("border-green-500");
+        telefonError.classList.add("hidden");
+    }
+});
+
+// MAİL KONTROL
+mailInput.addEventListener("input", () => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!regex.test(mailInput.value)) {
+        mailInput.classList.remove("border-gray-700");
+        mailInput.classList.add("border-red-500");
+        mailError.classList.remove("hidden");
+    } else {
+        mailInput.classList.remove("border-red-500");
+        mailInput.classList.add("border-green-500");
+        mailError.classList.add("hidden");
+    }
+});
+
+submitBtn.addEventListener("click", () => {
+
+    const isimValid = /^[A-Za-zğüşöçıİĞÜŞÖÇ\s]+$/.test(isimInput.value);
+    const telefonValid = /^[0-9]{10,11}$/.test(telefonInput.value);
+    const mailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mailInput.value);
+
+    if (isimValid && telefonValid && mailValid) {
+
+        toast.classList.remove("hidden");
+        toast.classList.remove("bg-red-600");
+        toast.classList.add("bg-green-600");
+        toast.innerText = "Başarıyla gönderildi ✅\nYetkilimiz sizinle en kısa sürede görüşecektir.";
+
+    } else {
+
+        toast.classList.remove("hidden");
+        toast.classList.remove("bg-green-600");
+        toast.classList.add("bg-red-600");
+        toast.innerText = "Gönderim işlemi başarısız ❌";
+
+    }
+
+    // Kaybolma
+    setTimeout(() => {
+        toast.classList.add("hidden");
+    }, 3000);
+
+});
+</script>
 
 </body>
 </html>
