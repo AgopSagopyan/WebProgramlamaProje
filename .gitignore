@@ -16,6 +16,8 @@ devenv.local.yaml
 !/storage/cache/.gitkeep
 !/storage/uploads/.gitkeep
 
+/node_modules/
+
 .log
 
 .DS_Store
@@ -24,3 +26,6 @@ devenv.local.yaml
 .idea/
 
 /db
+
+package.json
+package-lock.json
