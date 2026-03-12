@@ -9,6 +9,10 @@
 
 <style>
 
+    html{
+scroll-behavior:smooth;
+}
+
 *{
 margin:0;
 padding:0;
@@ -122,7 +126,7 @@ transition:.3s;
 background:#e02121;
 }
 
-/* SECTION */
+/* Bölüm */
 
 .section{
 padding:60px 80px;
@@ -134,7 +138,7 @@ font-weight:600;
 margin-bottom:30px;
 }
 
-/* MOVIE GRID */
+/* Film Tablosu */
 
 .movies{
 display:grid;
@@ -142,7 +146,7 @@ grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
 gap:25px;
 }
 
-/* MOVIE CARD */
+/* Film Kartı */
 
 .movie{
 background:#1a1a1a;
@@ -193,7 +197,7 @@ transition:.3s;
 background:#e02121;
 }
 
-/* MORE BUTTON */
+/* Daha Fazla */
 
 .more{
 margin-top:40px;
@@ -215,28 +219,32 @@ cursor:pointer;
 
 <body>
 
-<!-- NAVBAR -->
+<!-- Sol Üst -->
 
 <div class="navbar">
 
 <div class="logo">CineDavud</div>
 
 <div class="menu">
-<a href="#">Filmler</a>
-<a href="#">Yakında</a>
+<a href="#filmler">Filmler</a>
+<a href="#yakinda">Yakında</a>
 <a href="#">Etkinlikler</a>
 <a href="#">Daha Fazla</a>
 </div>
 
 <div class="auth">
+<a href="giris.php">
 <button class="btn login">Giriş Yap</button>
+</a>
+<a href="uyeol.php">
 <button class="btn signup">Üye Ol</button>
+</a>
 </div>
 
 </div>
 
 
-<!-- HERO -->
+<!-- Orta Kısım -->
 
 <div class="hero">
 
@@ -250,7 +258,7 @@ cursor:pointer;
 
 <!-- VIZYON -->
 
-<div class="section">
+<div class="section" id="filmler">
 
 <div class="section-title">Vizyondaki Filmler</div>
 
@@ -299,7 +307,7 @@ cursor:pointer;
 
 <!-- YAKINDA -->
 
-<div class="section">
+<div class="section" id="yakinda">
 
 <div class="section-title">Yakında</div>
 
