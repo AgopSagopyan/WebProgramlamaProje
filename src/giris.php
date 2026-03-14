@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 2 saniye sonra yönlendir
         setTimeout(() => {
-            window.location.href = "baba.php"; 
+            window.location.href = "anasayfa.php"; 
         }, 2000);
 
     } else {
