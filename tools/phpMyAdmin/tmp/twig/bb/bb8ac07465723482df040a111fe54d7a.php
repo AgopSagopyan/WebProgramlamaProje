@@ -185,6 +185,6 @@ yield _gettext("Table:");
 
     public function getSourceContext()
     {
-        return new Source("", "menu/breadcrumbs.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/menu/breadcrumbs.twig");
+        return new Source("", "menu/breadcrumbs.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/menu/breadcrumbs.twig");
     }
 }

@@ -73,6 +73,6 @@ class __TwigTemplate_894e759e12d72bdcf3d1438db64ea6af extends Template
 
     public function getSourceContext()
     {
-        return new Source("", "message.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/message.twig");
+        return new Source("", "message.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/message.twig");
     }
 }

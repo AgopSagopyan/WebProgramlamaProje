@@ -1,12 +1,18 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 {
   # https://devenv.sh/basics/
   env.GREET = "devenv";
 
   # https://devenv.sh/packages/
-  packages = [ 
-    pkgs.git 
+  packages = [
+    pkgs.git
     pkgs.tailwindcss
   ];
 
@@ -67,17 +73,15 @@
     npm.enable = true;
   };
 
-
   processes.php-server.exec = "php -S localhost:8000";
 
   processes.tailwind.exec = "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch";
 
   services.mysql = {
     enable = true;
-        
 
     package = pkgs.mariadb;
-    initialDatabases = [{ name = "denemeDB"; }];
+    initialDatabases = [ { name = "denemeDB"; } ];
 
     ensureUsers = [
       {
@@ -88,12 +92,18 @@
         };
       }
       {
+        name = "root";
+        password = "root";
+        ensurePermissions = {
+          "denemeDB.*" = "ALL PRIVILEGES";
+        };
+      }
+      {
         name = "backup";
         ensurePermissions = {
           "*.*" = "SELECT, LOCK TABLES";
         };
       }
-    ]
-    ;
+    ];
   };
 }

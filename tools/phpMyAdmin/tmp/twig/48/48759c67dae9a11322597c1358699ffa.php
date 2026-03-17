@@ -218,6 +218,6 @@ class __TwigTemplate_b46daaad4582d77c8ed7b81d2ef3d052 extends Template
 
     public function getSourceContext()
     {
-        return new Source("", "header.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/header.twig");
+        return new Source("", "header.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/header.twig");
     }
 }

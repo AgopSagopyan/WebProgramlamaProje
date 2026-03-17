@@ -98,6 +98,6 @@ yield _gettext("Delete settings");
 
     public function getSourceContext()
     {
-        return new Source("", "preferences/autoload.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/preferences/autoload.twig");
+        return new Source("", "preferences/autoload.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/preferences/autoload.twig");
     }
 }

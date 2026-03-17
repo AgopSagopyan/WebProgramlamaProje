@@ -99,6 +99,6 @@ yield _gettext("Create");
 
     public function getSourceContext()
     {
-        return new Source("", "database/create_table.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/database/create_table.twig");
+        return new Source("", "database/create_table.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/database/create_table.twig");
     }
 }

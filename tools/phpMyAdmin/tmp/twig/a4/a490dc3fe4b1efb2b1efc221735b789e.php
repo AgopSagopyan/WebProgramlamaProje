@@ -147,6 +147,6 @@ class __TwigTemplate_f884fe06881c160725a2c762190112a3 extends Template
 
     public function getSourceContext()
     {
-        return new Source("", "database/structure/index.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/database/structure/index.twig");
+        return new Source("", "database/structure/index.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/database/structure/index.twig");
     }
 }

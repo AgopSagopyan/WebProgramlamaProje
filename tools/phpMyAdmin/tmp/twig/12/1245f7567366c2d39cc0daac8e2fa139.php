@@ -92,6 +92,6 @@ yield _gettext("Close");
 
     public function getSourceContext()
     {
-        return new Source("", "modals/enum_set_editor.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/modals/enum_set_editor.twig");
+        return new Source("", "modals/enum_set_editor.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/modals/enum_set_editor.twig");
     }
 }

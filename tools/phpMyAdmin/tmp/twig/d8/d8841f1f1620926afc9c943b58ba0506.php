@@ -97,6 +97,6 @@ yield _gettext("No tables found in database.");
 
     public function getSourceContext()
     {
-        return new Source("", "navigation/tree/path.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/navigation/tree/path.twig");
+        return new Source("", "navigation/tree/path.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/navigation/tree/path.twig");
     }
 }

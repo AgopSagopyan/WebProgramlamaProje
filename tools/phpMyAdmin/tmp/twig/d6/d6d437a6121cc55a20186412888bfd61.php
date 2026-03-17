@@ -226,6 +226,6 @@ yield _pgettext("Last page", "End");
 
     public function getSourceContext()
     {
-        return new Source("", "list_navigator.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/list_navigator.twig");
+        return new Source("", "list_navigator.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/list_navigator.twig");
     }
 }
