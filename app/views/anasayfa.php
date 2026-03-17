@@ -213,6 +213,22 @@ border-radius:6px;
 cursor:pointer;
 }
 
+    .kategoriSlider{
+display:flex;
+gap:20px;
+overflow-x:auto;
+padding-bottom:10px;
+}
+
+.kategoriSlider::-webkit-scrollbar{
+height:8px;
+}
+
+.kategoriSlider::-webkit-scrollbar-thumb{
+background:#444;
+border-radius:10px;
+}
+
 </style>
 </head>
 
@@ -228,8 +244,8 @@ cursor:pointer;
 <div class="menu">
 <a href="#filmler">Filmler</a>
 <a href="#yakinda">Yakında</a>
-<a href="#">Etkinlikler</a>
-<a href="#">Daha Fazla</a>
+<a href="hakkımızda.php">Hakkımızda&İletişim</a>
+<a href="#tumunuGor">Daha Fazla</a>
 </div>
 
 <div class="auth">
@@ -262,7 +278,7 @@ cursor:pointer;
 
 <div class="section-title">Vizyondaki Filmler</div>
 
-<div class="movies">
+<div class="movies" id="filmListesi">
 
 <div class="movie">
 <img src="https://picsum.photos/400/600?1">
@@ -342,12 +358,75 @@ cursor:pointer;
 </div>
 
 </div>
-
+<div class="section" id="tumunuGor">
 <div class="more">
-<button>Tümünü Gör</button>
+<button id="tumunuGorBtn">Tümünü Gör</button>
 </div>
 
 </div>
+
+    <script>
+
+const btn = document.getElementById("tumunuGorBtn");
+const filmBolumu = document.getElementById("filmler");
+
+btn.addEventListener("click", () => {
+
+const yeniKategori = `
+<h2 style="margin-top:60px;margin-bottom:20px;">Aksiyon Filmleri</h2>
+
+<div class="kategoriSlider">
+
+<div class="movie">
+<img src="https://picsum.photos/400/600?1">
+<div class="movie-body">
+<div class="movie-title">Hızlı Operasyon</div>
+<button class="buy">Bilet Al</button>
+</div>
+</div>
+
+<div class="movie">
+<img src="https://picsum.photos/400/600?2">
+<div class="movie-body">
+<div class="movie-title">Tehlikeli Görev</div>
+<button class="buy">Bilet Al</button>
+</div>
+</div>
+
+<div class="movie">
+<img src="https://picsum.photos/400/600?3">
+<div class="movie-body">
+<div class="movie-title">Gece Takibi</div>
+<button class="buy">Bilet Al</button>
+</div>
+</div>
+
+<div class="movie">
+<img src="https://picsum.photos/400/600?4">
+<div class="movie-body">
+<div class="movie-title">Son Çarpışma</div>
+<button class="buy">Bilet Al</button>
+</div>
+</div>
+
+<div class="movie">
+<img src="https://picsum.photos/400/600?5">
+<div class="movie-body">
+<div class="movie-title">Büyük Operasyon</div>
+<button class="buy">Bilet Al</button>
+</div>
+</div>
+
+</div>
+`;
+
+filmBolumu.innerHTML += yeniKategori;
+
+btn.remove(); // butonu siler
+
+});
+
+</script>
 
 </body>
 </html>
