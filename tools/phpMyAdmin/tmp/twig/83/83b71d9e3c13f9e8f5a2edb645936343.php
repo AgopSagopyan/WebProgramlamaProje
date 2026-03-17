@@ -88,6 +88,6 @@ yield _gettext("Close");
 
     public function getSourceContext()
     {
-        return new Source("", "modals/preview_sql_modal.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/modals/preview_sql_modal.twig");
+        return new Source("", "modals/preview_sql_modal.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/modals/preview_sql_modal.twig");
     }
 }

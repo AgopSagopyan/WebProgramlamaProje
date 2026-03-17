@@ -391,6 +391,6 @@ yield _gettext("Allow users to customize this value");
 
     public function getSourceContext()
     {
-        return new Source("", "config/form_display/input.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/config/form_display/input.twig");
+        return new Source("", "config/form_display/input.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/config/form_display/input.twig");
     }
 }

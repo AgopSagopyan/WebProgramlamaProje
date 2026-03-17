@@ -92,6 +92,6 @@ yield _gettext("Close");
 
     public function getSourceContext()
     {
-        return new Source("", "modals/create_view.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/modals/create_view.twig");
+        return new Source("", "modals/create_view.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/modals/create_view.twig");
     }
 }

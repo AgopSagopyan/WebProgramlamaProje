@@ -105,6 +105,6 @@ yield _gettext("Clear fast filter");
 
     public function getSourceContext()
     {
-        return new Source("", "navigation/tree/fast_filter.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/navigation/tree/fast_filter.twig");
+        return new Source("", "navigation/tree/fast_filter.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/navigation/tree/fast_filter.twig");
     }
 }

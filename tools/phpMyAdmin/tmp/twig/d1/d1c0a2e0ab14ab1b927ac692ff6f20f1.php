@@ -79,6 +79,6 @@ class __TwigTemplate_cd7f7e3580392664a4199c3ac2e88ecf extends Template
 
     public function getSourceContext()
     {
-        return new Source("", "navigation/tree/controls.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/navigation/tree/controls.twig");
+        return new Source("", "navigation/tree/controls.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/navigation/tree/controls.twig");
     }
 }

@@ -99,6 +99,6 @@ class __TwigTemplate_833d416febc0e1a6f5a0f16d9b407490 extends Template
 
     public function getSourceContext()
     {
-        return new Source("", "console/toolbar.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/console/toolbar.twig");
+        return new Source("", "console/toolbar.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/console/toolbar.twig");
     }
 }

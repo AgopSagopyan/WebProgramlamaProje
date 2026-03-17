@@ -1,8 +1,9 @@
 <?php
+/*
 
-require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/app/models/Model.php';
 
-class UserRepository
+class Controller
 {
     private $_userModel;
 
@@ -15,6 +16,31 @@ class UserRepository
     {
         $users = $this->_userModel->getAllUsers();
 
-        require __DIR__ . '/../views/index.php';
+        require __DIR__ . '/app/views/index.php';
     }
 }
+*/
+
+require_once __DIR__ . '/../models/Model.php';
+//require_once __DIR__ . '/../views/anasayfa.php';
+
+class Controller {
+
+    private $_pdo;
+
+    public function __construct($pdo) {
+        $this->_pdo = $pdo;
+    }
+
+
+    public function bisey() {
+        $model = new Model($this->_pdo);
+        $result = $model->yazdir("Merhaba zenci");
+
+        require_once __DIR__ . '/../views/mvcdeneme.php';
+    }
+
+
+}
+
+?>

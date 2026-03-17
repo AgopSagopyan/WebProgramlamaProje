@@ -751,6 +751,6 @@ yield _gettext("Get more themes!");
 
     public function getSourceContext()
     {
-        return new Source("", "home/index.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/home/index.twig");
+        return new Source("", "home/index.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/home/index.twig");
     }
 }

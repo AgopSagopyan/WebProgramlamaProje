@@ -88,6 +88,6 @@ yield _gettext("Close");
 
     public function getSourceContext()
     {
-        return new Source("", "modals/unhide_nav_item.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/modals/unhide_nav_item.twig");
+        return new Source("", "modals/unhide_nav_item.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/modals/unhide_nav_item.twig");
     }
 }

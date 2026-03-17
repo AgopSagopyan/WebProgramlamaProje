@@ -289,6 +289,6 @@ yield _gettext("SQL upload");
 
     public function getSourceContext()
     {
-        return new Source("", "navigation/main.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/navigation/main.twig");
+        return new Source("", "navigation/main.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/navigation/main.twig");
     }
 }

@@ -261,6 +261,6 @@ yield _gettext("Switch to dark theme");
 
     public function getSourceContext()
     {
-        return new Source("", "console/display.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/console/display.twig");
+        return new Source("", "console/display.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/console/display.twig");
     }
 }

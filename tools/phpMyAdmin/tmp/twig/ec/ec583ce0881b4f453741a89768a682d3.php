@@ -303,6 +303,6 @@ yield _gettext("Reset");
 
     public function getSourceContext()
     {
-        return new Source("", "config/form_display/display.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/config/form_display/display.twig");
+        return new Source("", "config/form_display/display.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/config/form_display/display.twig");
     }
 }

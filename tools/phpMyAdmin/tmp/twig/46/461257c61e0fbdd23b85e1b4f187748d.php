@@ -192,6 +192,6 @@ yield _gettext("Git information missing!");
 
     public function getSourceContext()
     {
-        return new Source("", "footer.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/footer.twig");
+        return new Source("", "footer.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/footer.twig");
     }
 }

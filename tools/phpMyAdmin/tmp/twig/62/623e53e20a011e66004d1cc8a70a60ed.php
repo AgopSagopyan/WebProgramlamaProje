@@ -105,6 +105,6 @@ class __TwigTemplate_ca25aff5c3a84179023e5f3e4b8d4bbd extends Template
 
     public function getSourceContext()
     {
-        return new Source("", "console/query_action.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/console/query_action.twig");
+        return new Source("", "console/query_action.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/console/query_action.twig");
     }
 }

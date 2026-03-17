@@ -116,6 +116,6 @@ yield _gettext("(current)");
 
     public function getSourceContext()
     {
-        return new Source("", "top_menu.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/top_menu.twig");
+        return new Source("", "top_menu.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/top_menu.twig");
     }
 }

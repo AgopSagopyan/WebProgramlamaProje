@@ -72,6 +72,6 @@ class __TwigTemplate_fd7080bee41afc5d062e61dbbbb5650a extends Template
 
     public function getSourceContext()
     {
-        return new Source("", "login/footer.twig", "/home/keremcem/Projects/phpDevenv/phpMyAdmin/templates/login/footer.twig");
+        return new Source("", "login/footer.twig", "/home/keremcem/WEB/WebProgramlamaProje/tools/phpMyAdmin/templates/login/footer.twig");
     }
 }
