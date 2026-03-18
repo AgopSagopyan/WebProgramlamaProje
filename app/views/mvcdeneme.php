@@ -5,7 +5,7 @@
 <body>
 
     <?php
-        echo $result;
+        echo "Hello from mvcdeneme";
 
     ?>
 

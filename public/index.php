@@ -12,15 +12,22 @@ require __DIR__ . '/../app/views/anasayfa.php';
 exit();
 */
 
-require_once __DIR__ . '/../app/config/database.php';
-require_once __DIR__ . '/../app/controllers/Controller.php';
-require_once __DIR__ . '/../app/repositories/Repository.php';
+define('ROOT', __DIR__ . '/../' );
+
+
+require_once ROOT . '/app/config/database.php';
+
+require_once ROOT . '/app/controllers/Controller.php';
+require_once ROOT . '/app/repositories/Repository.php';
+require_once ROOT . '/app/services/Services.php';
 
 $repository = new Repository($pdo);
 
-$controller = new Controller($pdo, $repository);
+$service = new Services();
 
-$controller->bisey();
+$controller = new Controller($pdo, $service);
+
+$controller->navigateTo();
 
 
 
