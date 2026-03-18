@@ -5,7 +5,18 @@ include("baglan.php");
 if(isset($_POST["ekle"])){
 
 $ad = $_POST["film_adi"];
-$resim = $_POST["resim"];
+$dosyaAdi = $_FILES["resim"]["name"];
+$tmp = $_FILES["resim"]["tmp_name"];
+
+$yeniAd = time() . "_" . $dosyaAdi;
+
+// klasör yolu
+$hedef = "images/" . $yeniAd;
+
+// yükleme
+move_uploaded_file($tmp, $hedef);
+
+$resim = $hedef;
 $kategori = $_POST["kategori"];
 
 $sql = "INSERT INTO filmler (film_adi, resim, kategori)
@@ -46,16 +57,18 @@ $baglan->query("DELETE FROM filmler WHERE id=$id");
 
 <h2 class="text-xl font-semibold mb-4">Film Ekle</h2>
 
-<form method="POST" class="space-y-4">
+<form method="POST" enctype="multipart/form-data" class="space-y-4">
 
 <input type="text" name="film_adi" placeholder="Film Adı"
 class="w-full p-3 rounded bg-gray-700 outline-none">
 
-<input type="text" name="resim" placeholder="Resim URL"
+<input type="file" name="resim"
 class="w-full p-3 rounded bg-gray-700 outline-none">
 
-<input type="text" name="kategori" placeholder="Kategori (Aksiyon, Komedi...)"
-class="w-full p-3 rounded bg-gray-700 outline-none">
+<select name="kategori" class="w-full p-3 rounded bg-gray-700 outline-none">
+    <option value="vizyonda">Vizyonda</option>
+    <option value="yakinda">Yakında</option>
+</select>
 
 <button name="ekle"
 class="w-full bg-blue-600 py-3 rounded-lg hover:bg-blue-700 transition">

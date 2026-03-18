@@ -13,29 +13,31 @@
         <h2 class="text-white text-2xl font-bold mb-8">Admin Panel</h2>
 
         <nav class="space-y-4">
-
+            <!-- Kullanıcılar -->
             <a href="#" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
                 Kullanıcılar
             </a>
 
-            <a href="#" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
+            <!-- Filmler kısmı -->
+            <a href="admindeneme.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
                 Filmler
             </a>
 
+            <!-- Rezervasyonlar -->
             <a href="#" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
                 Rezervasyonlar
             </a>
 
+            <!-- İstatistik -->
             <a href="#" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
                 İstatistik
             </a>
-
         </nav>
 
         <div class="mt-auto">
-            <a href="logout.php"
-               class="block text-red-400 hover:text-red-300 p-2 rounded mt-8">
-               Çıkış Yap
+            <!-- Çıkış Yap kısmı -->
+            <a href="anasayfa.php" class="block text-red-400 hover:text-red-300 p-2 rounded mt-8">
+                Çıkış Yap
             </a>
         </div>
 

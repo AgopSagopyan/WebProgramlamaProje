@@ -1,3 +1,7 @@
+<?php
+include("baglan.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -281,40 +285,27 @@ border-radius:10px;
 <div class="movies" id="filmListesi">
 
 <div class="movie">
-<img src="https://picsum.photos/400/600?1">
+<?php
+
+$sql = "SELECT * FROM filmler";
+$sonuc = $baglan->query($sql);
+
+while($row = $sonuc->fetch_assoc()){
+?>
+
+<div class="movie">
+<img src="<?php echo $row["resim"]; ?>">
+
 <div class="movie-body">
-<div class="movie-title">Davud Zamanı</div>
-<div class="rating">⭐⭐⭐⭐ 8.4</div>
+<div class="movie-title">
+<?php echo $row["film_adi"]; ?>
+</div>
+
 <button class="buy">Bilet Al</button>
 </div>
 </div>
 
-<div class="movie">
-<img src="https://picsum.photos/400/600?2">
-<div class="movie-body">
-<div class="movie-title">Gizemli David</div>
-<div class="rating">⭐⭐⭐⭐ 7.9</div>
-<button class="buy">Bilet Al</button>
-</div>
-</div>
-
-<div class="movie">
-<img src="https://picsum.photos/400/600?3">
-<div class="movie-body">
-<div class="movie-title">Animasyon Diyarı</div>
-<div class="rating">⭐⭐⭐⭐ 8.1</div>
-<button class="buy">Bilet Al</button>
-</div>
-</div>
-
-<div class="movie">
-<img src="https://picsum.photos/400/600?4">
-<div class="movie-body">
-<div class="movie-title">Macera Adası</div>
-<div class="rating">⭐⭐⭐⭐ 8.0</div>
-<button class="buy">Bilet Al</button>
-</div>
-</div>
+<?php } ?>
 
 </div>
 
