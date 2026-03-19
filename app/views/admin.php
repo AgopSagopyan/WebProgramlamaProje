@@ -24,7 +24,7 @@
             </a>
 
             <!-- Rezervasyonlar -->
-            <a href="#" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
+            <a href="biletadmin.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
                 Rezervasyonlar
             </a>
 
