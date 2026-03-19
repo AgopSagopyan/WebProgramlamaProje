@@ -14,7 +14,7 @@
 
         <nav class="space-y-4">
             <!-- Kullanıcılar -->
-            <a href="#" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
+            <a href="kullanicilar.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
                 Kullanıcılar
             </a>
 

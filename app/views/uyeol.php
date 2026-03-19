@@ -1,58 +1,74 @@
+<?php
+// Hata mesajlarını tutmak için
+$hata = "";
+
+// Formdan veri geldiyse işle
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Kullanıcıdan gelen veriler
+    $isim = $_POST["isim"];
+    $mail = $_POST["mail"];
+    $telefon = $_POST["telefon"];
+    $sifre = $_POST["sifre"];
+
+    // Mail formatı kontrolü
+    if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+        $hata = "❌ Lütfen geçerli bir e-posta adresi girin.";
+    }
+
+    // Eğer hata yoksa veritabanına kaydet
+    if (empty($hata)) {
+        require "baglanti.php";
+        
+        // Kullanıcı verilerini veritabanına ekle
+        $sql = "INSERT INTO kullanicilar (isim, mail, telefon, sifre) VALUES (:isim, :mail, :telefon, :sifre)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'isim' => $isim,
+            'mail' => $mail,
+            'telefon' => $telefon,
+            'sifre' => $sifre // Şifreyi düz metin olarak kaydediyoruz
+        ]);
+
+        // Başarı mesajı
+        header('Location: giris.php'); // Başarılı kayıttan sonra giriş sayfasına yönlendir
+        exit();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>Üye Ol</title>
-<script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <title>Üye Ol</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-black min-h-screen flex items-center justify-center">
 
-<div class="bg-gray-900 p-10 rounded-2xl shadow-2xl w-full max-w-md text-white">
+    <div class="bg-gray-900 p-10 rounded-2xl shadow-2xl w-full max-w-md text-white">
 
-<h1 class="text-3xl font-bold text-center mb-8">Üye Ol</h1>
+        <h1 class="text-3xl font-bold text-center mb-8">Üye Ol</h1>
 
-<input id="isim" class="w-full p-3 mb-4 rounded text-black focus:ring-2 focus:ring-blue-500" placeholder="İsim Soyisim">
-<input id="mail" class="w-full p-3 mb-4 rounded text-black focus:ring-2 focus:ring-blue-500" placeholder="Mail">
-<input id="telefon" class="w-full p-3 mb-4 rounded text-black focus:ring-2 focus:ring-blue-500" placeholder="Telefon">
-<input id="sifre" type="password" class="w-full p-3 mb-6 rounded text-black focus:ring-2 focus:ring-blue-500" placeholder="Şifre">
+        <!-- Kayıt Formu -->
+        <form method="POST" action="uyeol.php">
+            <input id="isim" name="isim" class="w-full p-3 mb-4 rounded text-black focus:ring-2 focus:ring-blue-500" placeholder="İsim Soyisim" required>
+            <input id="mail" name="mail" class="w-full p-3 mb-4 rounded text-black focus:ring-2 focus:ring-blue-500" placeholder="Mail" required>
+            <input id="telefon" name="telefon" class="w-full p-3 mb-4 rounded text-black focus:ring-2 focus:ring-blue-500" placeholder="Telefon" required>
+            <input id="sifre" name="sifre" type="password" class="w-full p-3 mb-6 rounded text-black focus:ring-2 focus:ring-blue-500" placeholder="Şifre" required>
 
-<button id="btn" class="w-full bg-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-Kayıt Ol
-</button>
+            <!-- Hata mesajı -->
+            <?php if ($hata): ?>
+                <div class="p-3 mb-4 text-red-400 text-center"><?= $hata ?></div>
+            <?php endif; ?>
 
-<div id="sonuc" class="mt-6 text-center text-lg"></div>
+            <!-- Kayıt Butonu -->
+            <button type="submit" class="w-full bg-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                Kayıt Ol
+            </button>
+        </form>
 
-</div>
-
-<script>
-document.getElementById("btn").addEventListener("click", () => {
-
-    let isim = document.getElementById("isim").value;
-    let mail = document.getElementById("mail").value;
-    let telefon = document.getElementById("telefon").value;
-    let sifre = document.getElementById("sifre").value;
-
-    fetch("kayit.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `isim=${isim}&mail=${mail}&telefon=${telefon}&sifre=${sifre}`
-    })
-    .then(res => res.text())
-    .then(data => {
-
-        if (data === "success") {
-            document.getElementById("sonuc").innerHTML = "<span class='text-green-400'>✅ Kayıt başarılı</span>";
-        } else {
-            document.getElementById("sonuc").innerHTML = "<span class='text-red-400'>❌ " + data + "</span>";
-        }
-
-    });
-
-});
-</script>
+    </div>
 
 </body>
 </html>
