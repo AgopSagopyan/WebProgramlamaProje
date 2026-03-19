@@ -270,7 +270,7 @@ border-radius:10px;
 
 <div class="hero-content">
 <h1>BİLETİNİZİ ALIN</h1>
-<button>Bilet Satın Al</button>
+<button class="buy" onclick="window.location.href='biletal.php'">Bilet Al</button>
 </div>
 
 </div>
