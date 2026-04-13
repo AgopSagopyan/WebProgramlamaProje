@@ -189,7 +189,8 @@ while($row = $sonuc->fetch_assoc()){
 
 <div class="movie">
 
-<img src="app/views/uploads/<?php echo basename($row["resim"]); ?>">
+
+<img src="<?php echo $row["resim"]; ?>">
 
 <div class="movie-body">
 <div class="movie-title">
