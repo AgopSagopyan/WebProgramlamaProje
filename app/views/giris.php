@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mail = $_POST["mail"];
     $sifre = $_POST["sifre"];
 
-    require "baglanti.php";
+    require "baglan.php";
 
     // Kullanıcıyı veritabanında ara
     $stmt = $pdo->prepare("SELECT * FROM kullanicilar WHERE mail = :mail");

@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Eğer hata yoksa veritabanına kaydet
     if (empty($hata)) {
-        require "baglanti.php";
+        require "baglan.php";
         
         // Kullanıcı verilerini veritabanına ekle
         $sql = "INSERT INTO kullanicilar (isim, mail, telefon, sifre) VALUES (:isim, :mail, :telefon, :sifre)";
