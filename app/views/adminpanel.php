@@ -83,7 +83,7 @@ while($row = $sonuc->fetch_assoc()){
 <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
 
 <div class="flex items-center gap-4">
-<img src="<?php echo $row["resim"]; ?>" class="w-16 h-16 object-cover rounded">
+<img src="views/<?php echo $row["resim"]; ?>" class="w-16 h-16 object-cover rounded">
 
 <div>
 <div class="font-semibold"><?php echo $row["film_adi"]; ?></div>

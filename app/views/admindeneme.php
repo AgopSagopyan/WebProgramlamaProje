@@ -4,31 +4,40 @@ include("baglan.php");
 // EKLEME
 if(isset($_POST["ekle"])){
 
-$ad = $_POST["film_adi"];
-$dosyaAdi = $_FILES["resim"]["name"];
-$tmp = $_FILES["resim"]["tmp_name"];
+    $ad = $_POST["film_adi"];
+    $kategori = $_POST["kategori"];
 
-$yeniAd = time() . "_" . $dosyaAdi;
+    // RESİM YÜKLEME
+    $resimAdi = $_FILES["resim"]["name"];
+    $tmp = $_FILES["resim"]["tmp_name"];
 
-// klasör yolu
-$hedef = "images/" . $yeniAd;
+    $klasor = "uploads/";
 
-// yükleme
-move_uploaded_file($tmp, $hedef);
+    // klasör yoksa oluştur
+    if(!file_exists($klasor)){
+        mkdir($klasor, 0777, true);
+    }
 
-$resim = $hedef;
-$kategori = $_POST["kategori"];
+    $yol = $klasor . $resimAdi;
 
-$sql = "INSERT INTO filmler (film_adi, resim, kategori)
-VALUES ('$ad', '$resim', '$kategori')";
+    move_uploaded_file($tmp, $yol);
 
-$baglan->query($sql);
+    // VERİTABANI
+    $sql = "INSERT INTO filmler (film_adi, resim, kategori)
+            VALUES ('$ad', '$yol', '$kategori')";
+
+    $baglan->query($sql);
 }
 
 // SİLME
 if(isset($_GET["sil"])){
-$id = $_GET["sil"];
-$baglan->query("DELETE FROM filmler WHERE id=$id");
+    $id = $_GET["sil"];
+
+    // önce bağlı biletleri sil
+    $baglan->query("DELETE FROM biletler WHERE film_id=$id");
+
+    // sonra filmi sil
+    $baglan->query("DELETE FROM filmler WHERE id=$id");
 }
 ?>
 
@@ -37,22 +46,14 @@ $baglan->query("DELETE FROM filmler WHERE id=$id");
 <head>
 <meta charset="UTF-8">
 <title>Admin Panel</title>
-
-<!-- TAILWIND -->
 <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
 <body class="bg-gray-900 text-white">
 
-<!-- HEADER -->
-<div class="bg-gray-800 p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold">🎬 Admin Panel</h1>
-</div>
-
 <div class="max-w-6xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 gap-10">
 
-<!-- SOL: EKLEME FORMU -->
+<!-- SOL: EKLE -->
 <div class="bg-gray-800 p-6 rounded-xl shadow-lg">
 
 <h2 class="text-xl font-semibold mb-4">Film Ekle</h2>
@@ -60,15 +61,13 @@ $baglan->query("DELETE FROM filmler WHERE id=$id");
 <form method="POST" enctype="multipart/form-data" class="space-y-4">
 
 <input type="text" name="film_adi" placeholder="Film Adı"
-class="w-full p-3 rounded bg-gray-700 outline-none">
+class="w-full p-3 rounded bg-gray-700 outline-none" required>
 
 <input type="file" name="resim"
-class="w-full p-3 rounded bg-gray-700 outline-none">
+class="w-full p-3 rounded bg-gray-700 outline-none" required>
 
-<select name="kategori" class="w-full p-3 rounded bg-gray-700 outline-none">
-    <option value="vizyonda">Vizyonda</option>
-    <option value="yakinda">Yakında</option>
-</select>
+<input type="text" name="kategori" placeholder="Kategori"
+class="w-full p-3 rounded bg-gray-700 outline-none" required>
 
 <button name="ekle"
 class="w-full bg-blue-600 py-3 rounded-lg hover:bg-blue-700 transition">
@@ -79,7 +78,7 @@ Film Ekle
 
 </div>
 
-<!-- SAĞ: FİLM LİSTESİ -->
+<!-- SAĞ: LİSTE -->
 <div class="bg-gray-800 p-6 rounded-xl shadow-lg">
 
 <h2 class="text-xl font-semibold mb-4">Filmler</h2>
@@ -96,12 +95,15 @@ while($row = $sonuc->fetch_assoc()){
 <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
 
 <div class="flex items-center gap-4">
-<img src="<?php echo $row["resim"]; ?>" class="w-16 h-16 object-cover rounded">
+
+<img src="<?php echo $row["resim"]; ?>"
+class="w-16 h-16 object-cover rounded">
 
 <div>
 <div class="font-semibold"><?php echo $row["film_adi"]; ?></div>
 <div class="text-sm text-gray-300"><?php echo $row["kategori"]; ?></div>
 </div>
+
 </div>
 
 <a href="?sil=<?php echo $row["id"]; ?>"
