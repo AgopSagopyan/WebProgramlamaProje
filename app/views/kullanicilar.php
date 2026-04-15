@@ -1,5 +1,5 @@
 <?php
-require "baglanti.php";
+require "baglan.php";
 
 // Kullanıcıları çekme
 $kullanicilar = $pdo->query("SELECT * FROM kullanicilar ORDER BY id DESC")->fetchAll();
