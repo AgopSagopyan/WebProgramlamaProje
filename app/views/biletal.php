@@ -1,28 +1,72 @@
 <?php
 include("baglan.php");
 
-// Form gönderimi
+// TÜM DOLU KOLTUKLARI ÇEK (film + salon + seans bazlı)
+$doluKoltuklar = [];
+
+$sqlDolu = "SELECT film_id, konum, seans, koltuklar FROM biletler";
+$resDolu = $baglan->query($sqlDolu);
+
+while($row = $resDolu->fetch_assoc()){
+    $koltuklar = explode(",", $row['koltuklar']);
+    foreach($koltuklar as $k){
+        $doluKoltuklar[] = [
+            "film_id" => $row['film_id'],
+            "konum" => $row['konum'],
+            "seans" => $row['seans'],
+            "koltuk" => $k
+        ];
+    }
+}
+
+
+// FORM GÖNDERİMİ
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
     $film_id = $_POST['film'];
     $isim = $_POST['isim'];
     $email = $_POST['email'];
     $konum = $_POST['konum'];
     $seans = $_POST['seans'];
-    $koltuklar = implode(",", $_POST['koltuk']); 
-    $adet = count($_POST['koltuk']);
+    $koltuklarArray = $_POST['koltuk'];
+    $koltuklar = implode(",", $koltuklarArray);
+    $adet = count($koltuklarArray);
 
-    $sqlInsert = "INSERT INTO biletler (film_id, konum, seans, koltuklar, isim, email, adet) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmtInsert = $baglan->prepare($sqlInsert);
-    $stmtInsert->bind_param("isssssi", $film_id, $konum, $seans, $koltuklar, $isim, $email, $adet);
-    $stmtInsert->execute();
+    // 🔴 ÇAKIŞMA KONTROLÜ
+    $sqlCheck = "SELECT koltuklar FROM biletler WHERE film_id=? AND konum=? AND seans=?";
+    $stmtCheck = $baglan->prepare($sqlCheck);
+    $stmtCheck->bind_param("iss", $film_id, $konum, $seans);
+    $stmtCheck->execute();
+    $resultCheck = $stmtCheck->get_result();
 
-    echo "<p style='color:lime; font-weight:bold;'>Biletiniz başarıyla alındı!</p>";
+    $dolu = [];
+
+    while($row = $resultCheck->fetch_assoc()){
+        $kDB = explode(",", $row['koltuklar']);
+        $dolu = array_merge($dolu, $kDB);
+    }
+
+    $cakisiyor = array_intersect($koltuklarArray, $dolu);
+
+    if(!empty($cakisiyor)){
+        echo "<p style='color:red; font-weight:bold;'>Seçilen koltuklardan bazıları dolu!</p>";
+    }else{
+
+        $sqlInsert = "INSERT INTO biletler (film_id, konum, seans, koltuklar, isim, email, adet) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmtInsert = $baglan->prepare($sqlInsert);
+        $stmtInsert->bind_param("isssssi", $film_id, $konum, $seans, $koltuklar, $isim, $email, $adet);
+        $stmtInsert->execute();
+
+        echo "<p style='color:lime; font-weight:bold;'>Bilet başarıyla alındı!</p>";
+    }
 }
 
-// Filmleri çek
+
+// FİLMLER
 $filmler = [];
 $sql = "SELECT * FROM filmler ORDER BY film_adi ASC";
 $result = $baglan->query($sql);
+
 while($row = $result->fetch_assoc()){
     $filmler[] = $row;
 }
@@ -33,44 +77,42 @@ while($row = $result->fetch_assoc()){
 <head>
 <meta charset="UTF-8">
 <title>Bilet Satın Al</title>
+
 <style>
 body{
     background:#0e0e0e;
     color:white;
-    font-family: 'Poppins', sans-serif;
+    font-family: Arial;
     padding:40px;
 }
-h2{ color:#ff2a2a; margin-bottom:20px; }
 
 .container{
     display:flex;
     gap:40px;
-    align-items:flex-start; /* üstte hizala */
 }
 
-/* Sol: Form */
 .form-panel{
     flex:1;
     background:#121212;
     padding:30px;
     border-radius:10px;
-    display:flex;
-    flex-direction:column; /* dikey içeriği stackle */
 }
 
-.form-panel label{ margin-top:15px; margin-bottom:5px; font-weight:500; }
 .form-panel input, .form-panel select{
     width:100%;
     padding:10px;
-    border-radius:6px;
-    border:none;
+    margin-top:10px;
 }
-button{
-    background:#ff2a2a; color:white; border:none; padding:12px 20px; border-radius:6px; cursor:pointer; font-weight:600; transition:.3s; margin-top:20px;
-}
-button:hover{ background:#e02121; }
 
-/* Sağ: Mini salon panel */
+button{
+    margin-top:20px;
+    padding:12px;
+    background:red;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+
 .koltuk-panel{
     flex:1;
     background:#1a1a1a;
@@ -78,121 +120,120 @@ button:hover{ background:#e02121; }
     border-radius:10px;
 }
 
-.koltuklar-salon{
+.koltuklar{
     display:grid;
-    grid-template-columns: repeat(5, 40px);
+    grid-template-columns: repeat(5, 50px);
     gap:10px;
     justify-content:center;
-    margin-top:20px;
 }
 
 .koltuk{
-    width:40px;
-    height:40px;
+    width:50px;
+    height:50px;
     background:#2b2b2b;
-    border-radius:5px;
     display:flex;
     justify-content:center;
     align-items:center;
     cursor:pointer;
-    user-select:none;
-    transition:.3s;
 }
 
-.koltuk.selected{ background:#ff2a2a; }
-.koltuk.occupied{ background:#555; cursor:not-allowed; }
-
-.sira-label{ text-align:center; font-weight:bold; margin-top:10px; }
+.selected{ background:red; }
+.occupied{ background:#555; cursor:not-allowed; }
 </style>
+
 </head>
 <body>
 
 <h2>Bilet Satın Al</h2>
 
 <div class="container">
-    <!-- Sol Form -->
-    <div class="form-panel">
-        <form method="POST" id="biletForm">
 
-            <label>Film:</label>
-            <select name="film" required>
-                <option value="">Seçiniz</option>
-                <?php foreach($filmler as $film): ?>
-                    <option value="<?php echo $film['id']; ?>"><?php echo $film['film_adi']; ?></option>
-                <?php endforeach; ?>
-            </select>
+<div class="form-panel">
+<form method="POST">
 
-            <label>Konum:</label>
-            <select name="konum" required>
-                <option value="">Seçiniz</option>
-                <option value="Salon 1">Salon 1</option>
-                <option value="Salon 2">Salon 2</option>
-                <option value="Salon 3">Salon 3</option>
-            </select>
+<select name="film" required>
+<option value="">Film seç</option>
+<?php foreach($filmler as $film): ?>
+<option value="<?= $film['id'] ?>"><?= $film['film_adi'] ?></option>
+<?php endforeach; ?>
+</select>
 
-            <label>Seans:</label>
-            <select name="seans" required>
-                <option value="">Seçiniz</option>
-                <option value="10:00">10:00</option>
-                <option value="13:00">13:00</option>
-                <option value="16:00">16:00</option>
-                <option value="19:00">19:00</option>
-                <option value="22:00">22:00</option>
-            </select>
+<select name="konum" required>
+<option value="">Salon</option>
+<option>Salon 1</option>
+<option>Salon 2</option>
+<option>Salon 3</option>
+</select>
 
-            <label>Adınız Soyadınız:</label>
-            <input type="text" name="isim" required>
+<select name="seans" required>
+<option value="">Seans</option>
+<option>10:00</option>
+<option>13:00</option>
+<option>16:00</option>
+<option>19:00</option>
+<option>22:00</option>
+</select>
 
-            <label>Email:</label>
-            <input type="email" name="email" required>
+<input type="text" name="isim" placeholder="Ad Soyad" required>
+<input type="email" name="email" placeholder="Email" required>
 
-            <!-- Seçilen koltuklar gizli input -->
-            <input type="hidden" name="koltuk[]" id="koltukInput">
+<input type="hidden" name="koltuk[]" id="koltukInput">
 
-            <button type="submit">Satın Al</button>
-        </form>
-    </div>
+<button>Satın Al</button>
 
-    <!-- Sağ: Mini Salon -->
-    <div class="koltuk-panel">
-        <div class="sira-label">Ekran Burada</div>
-        <div class="koltuklar-salon" id="salon">
-            <?php
-            $rows = ['A','B','C','D','E'];
-            $cols = 5;
-            foreach($rows as $r){
-                for($c=1;$c<=$cols;$c++){
-                    $koltuk = $r.$c;
-                    echo "<div class='koltuk' data-koltuk='$koltuk'>$koltuk</div>";
-                }
-            }
-            ?>
-        </div>
-    </div>
+</form>
+</div>
+
+<div class="koltuk-panel">
+<div class="koltuklar" id="salon">
+
+<?php
+$rows = ['A','B','C','D','E'];
+foreach($rows as $r){
+    for($i=1;$i<=5;$i++){
+        $k = $r.$i;
+        echo "<div class='koltuk' data-koltuk='$k'>$k</div>";
+    }
+}
+?>
+
+</div>
+</div>
+
 </div>
 
 <script>
-// Koltuk seçimi JS
-const koltuklar = document.querySelectorAll(".koltuk");
-const koltukInput = document.getElementById("koltukInput");
-let secilenKoltuklar = [];
+let doluKoltuklar = <?php echo json_encode($doluKoltuklar); ?>;
 
+const koltuklar = document.querySelectorAll(".koltuk");
+const input = document.getElementById("koltukInput");
+
+let secilen = [];
+
+//Dolu Koltuklar (Gri)
 koltuklar.forEach(k => {
-    k.addEventListener("click", ()=>{
+    doluKoltuklar.forEach(d => {
+        if(k.dataset.koltuk === d.koltuk){
+            k.classList.add("occupied");
+        }
+    });
+
+    k.addEventListener("click", () => {
         if(k.classList.contains("occupied")) return;
 
         if(k.classList.contains("selected")){
             k.classList.remove("selected");
-            secilenKoltuklar = secilenKoltuklar.filter(x => x != k.dataset.koltuk);
+            secilen = secilen.filter(x => x != k.dataset.koltuk);
         }else{
-            if(secilenKoltuklar.length >= 5){
-                alert("En fazla 5 koltuk seçebilirsiniz!");
+            if(secilen.length >= 5){
+                alert("Max 5 koltuk");
                 return;
             }
             k.classList.add("selected");
-            secilenKoltuklar.push(k.dataset.koltuk);
+            secilen.push(k.dataset.koltuk);
         }
-        koltukInput.value = secilenKoltuklar;
+
+        input.value = secilen;
     });
 });
 </script>
