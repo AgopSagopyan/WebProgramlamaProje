@@ -155,7 +155,7 @@ cursor:pointer;
 
 <div class="menu">
 <a href="#filmler">Filmler</a>
-<a href="hakkımızda.php">Hakkımızda&İletişim</a>
+<a href="iletisim.php">Hakkımızda&İletişim</a>
 </div>
 
 <div class="auth">

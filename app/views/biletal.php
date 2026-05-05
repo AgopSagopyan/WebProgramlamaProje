@@ -32,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $koltuklar = implode(",", $koltuklarArray);
     $adet = count($koltuklarArray);
 
-    // 🔴 ÇAKIŞMA KONTROLÜ
+    // ÇAKIŞMA KONTROLÜ
     $sqlCheck = "SELECT koltuklar FROM biletler WHERE film_id=? AND konum=? AND seans=?";
     $stmtCheck = $baglan->prepare($sqlCheck);
     $stmtCheck->bind_param("iss", $film_id, $konum, $seans);

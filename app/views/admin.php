@@ -41,6 +41,10 @@ $rezSayisi = $rezSorgu->fetch_assoc()['toplam'];
                 Rezervasyonlar
             </a>
 
+            <a href="sikayetler.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
+                Şikayetler
+            </a>
+
             <a href="#" class="block text-white bg-gray-700 p-2 rounded">
                 İstatistik
             </a>
@@ -58,7 +62,7 @@ $rezSayisi = $rezSorgu->fetch_assoc()['toplam'];
     <div class="flex-1 p-10">
 
         <h1 class="text-3xl font-bold text-white mb-6">
-            Hoş Geldin Admin 👑
+            Hoş Geldin Admin 
         </h1>
 
         <div class="grid grid-cols-3 gap-6">

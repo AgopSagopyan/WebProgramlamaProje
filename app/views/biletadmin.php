@@ -18,7 +18,7 @@ $result = $baglan->query($sql);
 
 <body class="bg-black min-h-screen flex">
 
-<!-- 🔥 SIDEBAR -->
+<!--SIDEBAR -->
 <div class="w-64 bg-gray-900 p-6 flex flex-col">
 
     <h2 class="text-white text-2xl font-bold mb-8">Admin Panel</h2>
@@ -36,6 +36,10 @@ $result = $baglan->query($sql);
             Rezervasyonlar
         </a>
 
+          <a href="sikayetler.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
+                Şikayetler
+            </a>
+
         <a href="admin.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
             İstatistik
         </a>
@@ -49,7 +53,7 @@ $result = $baglan->query($sql);
 
 </div>
 
-<!-- 🔥 SAĞ İÇERİK -->
+<!-- SAĞ İÇERİK -->
 <div class="flex-1 p-10 text-white">
 
     <h1 class="text-3xl font-bold mb-6"> Rezervasyonlar</h1>
@@ -113,7 +117,7 @@ $result = $baglan->query($sql);
 
 </div>
 
-<!-- 🔥 JS SİLME -->
+<!-- JS SİLME -->
 <script>
 const silBtns = document.querySelectorAll(".silBtn");
 

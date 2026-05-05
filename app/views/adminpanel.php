@@ -27,7 +27,6 @@ $baglan->query("DELETE FROM filmler WHERE id=$id");
 <meta charset="UTF-8">
 <title>Admin Panel</title>
 
-<!-- TAILWIND -->
 <script src="https://cdn.tailwindcss.com"></script>
 
 </head>

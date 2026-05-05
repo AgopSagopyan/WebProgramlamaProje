@@ -44,7 +44,7 @@ if(isset($_GET["sil"])){
 
 <body class="bg-black min-h-screen flex">
 
-<!-- 🔥 SIDEBAR -->
+<!-- SIDEBAR -->
 <div class="w-64 bg-gray-900 p-6 flex flex-col">
 
     <h2 class="text-white text-2xl font-bold mb-8">Admin Panel</h2>
@@ -62,6 +62,10 @@ if(isset($_GET["sil"])){
             Rezervasyonlar
         </a>
 
+          <a href="sikayetler.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
+                Şikayetler
+            </a>
+
         <a href="admin.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
             İstatistik
         </a>
@@ -75,7 +79,7 @@ if(isset($_GET["sil"])){
 
 </div>
 
-<!-- 🔥 SAĞ İÇERİK -->
+<!-- SAĞ İÇERİK -->
 <div class="flex-1 p-10 text-white">
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
