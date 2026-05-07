@@ -2,18 +2,33 @@
 session_start();
 include("baglan.php");
 
-/* COOKIE → SESSION AKTAR (ÇOK ÖNEMLİ) */
+/* COOKIE → SESSION AKTAR */
 if(!isset($_SESSION['kullanici_email']) && isset($_COOKIE['kullanici_email'])){
     $_SESSION['kullanici_email'] = $_COOKIE['kullanici_email'];
 }
 
-/* HALA YOKSA LOGIN'E GÖNDER */
+/* LOGIN KONTROL */
 if(!isset($_SESSION['kullanici_email'])){
     header("Location: giris.php");
     exit;
 }
 
 $email = $_SESSION['kullanici_email'];
+
+/* BİLET İPTAL */
+if(isset($_GET["iptal"])){
+
+    $id = (int)$_GET["iptal"];
+
+    $sil = $baglan->prepare("DELETE FROM biletler WHERE id=? AND email=?");
+    $sil->bind_param("is", $id, $email);
+    $sil->execute();
+
+    $_SESSION["mesaj"] = "Bilet başarıyla iptal edildi.";
+
+    header("Location: biletlerim.php");
+    exit;
+}
 
 /* BİLETLERİ ÇEK */
 $sql = "SELECT b.*, f.film_adi 
@@ -27,6 +42,7 @@ $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -39,6 +55,14 @@ $result = $stmt->get_result();
 
 <h1 class="text-3xl font-bold mb-8">🎟 Biletlerim</h1>
 
+<?php if(isset($_SESSION["mesaj"])){ ?>
+
+<div class="bg-green-600 text-white p-4 rounded-xl mb-6">
+    <?= $_SESSION["mesaj"] ?>
+</div>
+
+<?php unset($_SESSION["mesaj"]); } ?>
+
 <div class="grid gap-6">
 
 <?php if($result->num_rows > 0){ ?>
@@ -46,11 +70,27 @@ $result = $stmt->get_result();
 <?php while($row = $result->fetch_assoc()){ ?>
 
 <div class="bg-gray-900 p-6 rounded-xl shadow">
-<h2 class="text-red-400 text-xl mb-2"><?= $row['film_adi'] ?></h2>
+
+<h2 class="text-red-400 text-xl mb-2">
+    <?= $row['film_adi'] ?>
+</h2>
+
 <p><b>Salon:</b> <?= $row['konum'] ?></p>
+
 <p><b>Seans:</b> <?= $row['seans'] ?></p>
+
 <p><b>Koltuk:</b> <?= $row['koltuklar'] ?></p>
+
 <p><b>Adet:</b> <?= $row['adet'] ?></p>
+
+<a href="?iptal=<?= $row['id'] ?>"
+   onclick="return confirm('Bileti iptal etmek istiyor musunuz?')"
+   class="inline-block mt-4 bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition">
+
+   Bileti İptal Et
+
+</a>
+
 </div>
 
 <?php } ?>
