@@ -4,80 +4,197 @@ require "baglan.php";
 
 $hata = "";
 
+/* FORM GÖNDERİLDİ */
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $mail = trim($_POST["mail"]);
     $sifre = trim($_POST["sifre"]);
 
+    /* BOŞ KONTROL */
     if(empty($mail) || empty($sifre)){
-        $hata = "Boş bırakmayın!";
-    } else {
 
-        // KULLANICIYI BUL
-        $stmt = $pdo->prepare("SELECT * FROM kullanicilar WHERE mail = :mail");
-        $stmt->execute(['mail' => $mail]);
+        $hata = "Tüm alanları doldurun!";
+
+    }
+
+    /* MAİL FORMAT */
+    else if(!filter_var($mail, FILTER_VALIDATE_EMAIL)){
+
+        $hata = "Geçerli bir mail adresi giriniz!";
+
+    }
+
+    else{
+
+        /* KULLANICIYI BUL */
+        $stmt = $pdo->prepare("
+        SELECT * FROM kullanicilar
+        WHERE mail = :mail
+        ");
+
+        $stmt->execute([
+            'mail' => $mail
+        ]);
+
         $kullanici = $stmt->fetch();
 
-        if ($kullanici && $kullanici['sifre'] == $sifre) {
+        /* KULLANICI VAR MI */
+        if(!$kullanici){
 
-            // SESSION
+            $hata = "Böyle bir mail adresi bulunamadı!";
+
+        }
+
+        /* ŞİFRE KONTROL */
+        else if($kullanici['sifre'] != $sifre){
+
+            $hata = "Şifre yanlış!";
+
+        }
+
+        else{
+
+            /* SESSION */
             $_SESSION['kullanici_id'] = $kullanici['id'];
             $_SESSION['kullanici_isim'] = $kullanici['isim'];
             $_SESSION['kullanici_email'] = $kullanici['mail'];
 
-            // COOKIE (7 GÜN)
-            setcookie("kullanici_id", $kullanici['id'], time()+604800, "/");
-            setcookie("kullanici_isim", $kullanici['isim'], time()+604800, "/");
-            setcookie("kullanici_email", $kullanici['mail'], time()+604800, "/");
+            /* COOKIE */
+            setcookie(
+                "kullanici_id",
+                $kullanici['id'],
+                time()+604800,
+                "/"
+            );
+
+            setcookie(
+                "kullanici_isim",
+                $kullanici['isim'],
+                time()+604800,
+                "/"
+            );
+
+            setcookie(
+                "kullanici_email",
+                $kullanici['mail'],
+                time()+604800,
+                "/"
+            );
 
             header("Location: anasayfa.php");
             exit();
-
-        } else {
-            $hata = "Mail veya şifre yanlış!";
         }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+
 <meta charset="UTF-8">
+
 <title>Giriş Yap</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#0e0e0e;
+}
+
+</style>
+
 </head>
 
-<body class="bg-black flex items-center justify-center h-screen">
+<body class="min-h-screen flex items-center justify-center p-5">
 
-<div class="bg-gray-900 p-10 rounded-2xl w-full max-w-md text-white shadow-2xl">
+<div class="bg-gray-900 w-full max-w-md rounded-3xl p-10 shadow-2xl border border-gray-800">
 
-<h1 class="text-3xl font-bold text-center mb-6">Giriş Yap</h1>
+<!-- LOGO -->
 
-<?php if($hata): ?>
-<div class="bg-red-600 p-3 rounded mb-4 text-center">
+<div class="text-center mb-8">
+
+<h1 class="text-4xl font-bold text-red-500">
+CineDavud
+</h1>
+
+<p class="text-gray-400 mt-2">
+Hesabınıza giriş yapın
+</p>
+
+</div>
+
+<!-- HATA -->
+
+<?php if($hata){ ?>
+
+<div class="bg-red-600 text-white text-center p-3 rounded-xl mb-5">
 <?= $hata ?>
 </div>
-<?php endif; ?>
 
-<form method="POST">
+<?php } ?>
 
-<input name="mail"
-type="email"
-placeholder="Mail adresi"
-class="w-full p-3 mb-4 rounded text-black"
+<!-- FORM -->
+
+<form method="POST" class="space-y-5">
+
+<div>
+
+<label class="text-gray-300 block mb-2">
+Mail Adresi
+</label>
+
+<input
+name="mail"
+type="text"
+placeholder="ornek@mail.com"
+class="w-full p-4 rounded-xl bg-gray-800 text-white outline-none border border-gray-700 focus:border-blue-500"
 required>
 
-<input name="sifre"
+</div>
+
+<div>
+
+<label class="text-gray-300 block mb-2">
+Şifre
+</label>
+
+<input
+name="sifre"
 type="password"
-placeholder="Şifre"
-class="w-full p-3 mb-6 rounded text-black"
+placeholder="Şifrenizi girin"
+class="w-full p-4 rounded-xl bg-gray-800 text-white outline-none border border-gray-700 focus:border-blue-500"
 required>
 
-<button class="w-full bg-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-700">
+</div>
+
+<button
+class="w-full bg-red-600 hover:bg-red-700 transition py-4 rounded-xl font-semibold text-lg">
 Giriş Yap
 </button>
 
 </form>
+
+<!-- ALT -->
+
+<div class="text-center mt-8 text-gray-400">
+
+Hala üye değil misiniz?
+
+<a href="uyeol.php"
+class="text-red-500 hover:text-red-400 font-semibold ml-1">
+Üye Ol
+</a>
+
+</div>
 
 </div>
 

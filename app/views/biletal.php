@@ -1,10 +1,26 @@
 <?php
+session_start();
 include("baglan.php");
+
+/* COOKIE → SESSION */
+if(!isset($_SESSION['kullanici_id']) && isset($_COOKIE['kullanici_id'])){
+
+    $_SESSION['kullanici_id'] = $_COOKIE['kullanici_id'];
+    $_SESSION['kullanici_isim'] = $_COOKIE['kullanici_isim'];
+    $_SESSION['kullanici_email'] = $_COOKIE['kullanici_email'];
+}
+
+/* GİRİŞ YAPMAMIŞSA */
+if(!isset($_SESSION['kullanici_id'])){
+    header("Location: giris.php");
+    exit();
+}
 
 /* DOLU KOLTUKLARI ÇEK */
 $doluKoltuklar = [];
 
 $sqlDolu = "SELECT film_id, konum, seans, koltuklar FROM biletler";
+
 $resDolu = $baglan->query($sqlDolu);
 
 while($row = $resDolu->fetch_assoc()){
@@ -23,31 +39,48 @@ while($row = $resDolu->fetch_assoc()){
 }
 
 /* SATIN AL */
+$mesaj = "";
+
 if($_SERVER['REQUEST_METHOD'] == "POST"){
 
     $film_id = $_POST['film'];
-    $isim = $_POST['isim'];
-    $email = $_POST['email'];
+
+    /* SESSIONDAN ÇEK */
+    $isim = $_SESSION['kullanici_isim'];
+    $email = $_SESSION['kullanici_email'];
+
     $konum = $_POST['konum'];
     $seans = $_POST['seans'];
 
     $koltuklarArray = isset($_POST['koltuk']) ? $_POST['koltuk'] : [];
 
     if(empty($koltuklarArray)){
-        echo "<p style='color:red;text-align:center;'>Koltuk seçiniz.</p>";
+
+        $mesaj = "
+        <div class='error-box'>
+            Lütfen koltuk seçiniz.
+        </div>
+        ";
+
     }else{
 
         $koltuklar = implode(",", $koltuklarArray);
+
         $adet = count($koltuklarArray);
 
-        /* ÇAKIŞMA KONTROL */
+        /* ÇAKIŞMA */
 
-        $sqlCheck = "SELECT koltuklar FROM biletler 
+        $sqlCheck = "SELECT koltuklar FROM biletler
         WHERE film_id=? AND konum=? AND seans=?";
 
         $stmtCheck = $baglan->prepare($sqlCheck);
 
-        $stmtCheck->bind_param("iss", $film_id, $konum, $seans);
+        $stmtCheck->bind_param(
+            "iss",
+            $film_id,
+            $konum,
+            $seans
+        );
 
         $stmtCheck->execute();
 
@@ -67,7 +100,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
         if(!empty($cakisiyor)){
 
-            echo "<p style='color:red;text-align:center;'>Seçilen koltuk dolu!</p>";
+            $mesaj = "
+            <div class='error-box'>
+                Seçilen koltuklardan biri dolu.
+            </div>
+            ";
 
         }else{
 
@@ -90,113 +127,196 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
             $stmtInsert->execute();
 
-            echo "<p style='color:lime;text-align:center;'>Bilet alındı!</p>";
+            $mesaj = "
+            <div class='success-box'>
+                Bilet başarıyla satın alındı 🎟
+            </div>
+            ";
         }
     }
 }
 
 /* FİLMLER */
-$filmler = $baglan->query("SELECT * FROM filmler ORDER BY film_adi ASC");
+$filmler = $baglan->query("
+SELECT * FROM filmler
+ORDER BY film_adi ASC
+");
 ?>
 
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Bilet Al</title>
+<title>Bilet Satın Al</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
-body{
-    background:#0e0e0e;
-    color:white;
-    font-family:Arial;
-    padding:40px;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
 }
+
+body{
+background:#0e0e0e;
+color:white;
+padding:40px;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+}
+
+.logo{
+font-size:30px;
+font-weight:700;
+color:#ff2a2a;
+}
+
+.user{
+background:#1a1a1a;
+padding:12px 18px;
+border-radius:10px;
+}
+
+/* ALERT */
+
+.success-box{
+background:#14532d;
+padding:15px;
+border-radius:10px;
+margin-bottom:25px;
+text-align:center;
+font-weight:600;
+}
+
+.error-box{
+background:#7f1d1d;
+padding:15px;
+border-radius:10px;
+margin-bottom:25px;
+text-align:center;
+font-weight:600;
+}
+
+/* CONTAINER */
 
 .container{
-    display:flex;
-    gap:40px;
-    align-items:flex-start;
+display:flex;
+gap:40px;
+align-items:flex-start;
 }
 
-/* FORM PANEL */
+/* FORM */
 
 .form-panel{
-    flex:1;
-    background:#121212;
-    padding:30px;
-    border-radius:12px;
+flex:1;
+background:#121212;
+padding:35px;
+border-radius:16px;
 }
 
-.form-panel h3{
-    margin-bottom:20px;
+.form-panel h2{
+margin-bottom:25px;
+font-size:28px;
 }
 
-.form-panel input,
 .form-panel select{
-    width:100%;
-    padding:12px;
-    margin-top:12px;
-    background:#1a1a1a;
-    border:none;
-    color:white;
-    border-radius:6px;
+width:100%;
+padding:14px;
+margin-top:15px;
+background:#1d1d1d;
+border:none;
+border-radius:10px;
+color:white;
+font-size:15px;
 }
 
-.form-panel button{
-    margin-top:20px;
-    width:100%;
-    padding:12px;
-    background:red;
-    color:white;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
+.buy-btn{
+width:100%;
+padding:15px;
+background:#ff2a2a;
+border:none;
+border-radius:10px;
+color:white;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+margin-top:25px;
+transition:.3s;
 }
 
-/* KOLTUK PANEL */
+.buy-btn:hover{
+background:#e02121;
+}
+
+/* KOLTUK */
 
 .koltuk-panel{
-    flex:1;
-    background:#1a1a1a;
-    padding:25px;
-    border-radius:12px;
+flex:1;
+background:#121212;
+padding:35px;
+border-radius:16px;
+}
+
+.koltuk-title{
+text-align:center;
+font-size:28px;
+margin-bottom:20px;
 }
 
 .koltuklar{
-    display:grid;
-    grid-template-columns:repeat(5,55px);
-    gap:12px;
-    justify-content:center;
-    margin-top:20px;
+display:grid;
+grid-template-columns:repeat(5,60px);
+gap:14px;
+justify-content:center;
+margin-top:20px;
 }
 
 .koltuk{
-    width:55px;
-    height:55px;
-    background:#2b2b2b;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    border-radius:6px;
-    cursor:pointer;
-    transition:.2s;
+width:60px;
+height:60px;
+background:#2b2b2b;
+display:flex;
+justify-content:center;
+align-items:center;
+border-radius:10px;
+cursor:pointer;
+transition:.2s;
+font-weight:600;
 }
 
 .koltuk:hover{
-    background:#444;
+transform:scale(1.06);
 }
 
 .selected{
-    background:red !important;
+background:#ff2a2a !important;
 }
 
 .occupied{
-    background:#666 !important;
-    cursor:not-allowed !important;
-    pointer-events:none;
-    color:#d1d1d1;
+background:#666 !important;
+cursor:not-allowed;
+pointer-events:none;
+color:#d1d1d1;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.container{
+flex-direction:column;
+}
+
 }
 
 </style>
@@ -204,23 +324,35 @@ body{
 
 <body>
 
-<h2 style="text-align:center;margin-bottom:30px;">
-Bilet Satın Al
-</h2>
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+<div class="logo">
+CineDavud
+</div>
+
+<div class="user">
+👤 <?= $_SESSION['kullanici_isim']; ?>
+</div>
+
+</div>
+
+<?= $mesaj ?>
 
 <div class="container">
 
-<!-- SOL FORM -->
+<!-- SOL -->
 
 <div class="form-panel">
 
-<h3>Bilgiler</h3>
+<h2>Bilet Satın Al</h2>
 
 <form method="POST">
 
 <select name="film" id="film" required>
 
-<option value="">Film seç</option>
+<option value="">Film Seç</option>
 
 <?php while($film = $filmler->fetch_assoc()){ ?>
 
@@ -233,44 +365,46 @@ Bilet Satın Al
 </select>
 
 <select name="konum" id="konum" required>
-<option value="">Salon seç</option>
+
+<option value="">Salon Seç</option>
+
 <option value="Salon 1">Salon 1</option>
 <option value="Salon 2">Salon 2</option>
 <option value="Salon 3">Salon 3</option>
+
 </select>
 
 <select name="seans" id="seans" required>
-<option value="">Seans seç</option>
+
+<option value="">Seans Seç</option>
+
 <option value="10:00">10:00</option>
 <option value="13:00">13:00</option>
 <option value="16:00">16:00</option>
 <option value="19:00">19:00</option>
 <option value="22:00">22:00</option>
+
 </select>
 
-<input type="text" name="isim" placeholder="Ad Soyad" required>
-
-<input type="email" name="email" placeholder="Email" required>
-
-<!-- SEÇİLEN KOLTUKLAR -->
+<!-- KOLTUK INPUTLARI -->
 
 <div id="hiddenInputs"></div>
 
-<button type="submit">
-Satın Al
+<button type="submit" class="buy-btn">
+Bileti Satın Al
 </button>
 
 </form>
 
 </div>
 
-<!-- SAĞ KOLTUKLAR -->
+<!-- SAĞ -->
 
 <div class="koltuk-panel">
 
-<h3 style="text-align:center;">
+<div class="koltuk-title">
 Koltuk Seç
-</h3>
+</div>
 
 <div class="koltuklar">
 
@@ -325,6 +459,7 @@ function koltukGuncelle(){
     });
 
     secilen = [];
+
     hiddenInputs.innerHTML = "";
 
     const seciliFilm = film.value;
@@ -354,13 +489,13 @@ function koltukGuncelle(){
     });
 }
 
-/* SELECTLER */
+/* SELECT */
 
 film.addEventListener("change", koltukGuncelle);
 konum.addEventListener("change", koltukGuncelle);
 seans.addEventListener("change", koltukGuncelle);
 
-/* KOLTUK TIKLAMA */
+/* KOLTUK */
 
 koltuklar.forEach(k => {
 
@@ -391,14 +526,12 @@ koltuklar.forEach(k => {
             secilen.push(koltukNo);
         }
 
-        /* INPUTLARI YENİLE */
-
         hiddenInputs.innerHTML = "";
 
         secilen.forEach(s => {
 
             hiddenInputs.innerHTML += `
-                <input type="hidden" name="koltuk[]" value="${s}">
+            <input type="hidden" name="koltuk[]" value="${s}">
             `;
         });
     });

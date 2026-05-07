@@ -1,20 +1,93 @@
 <?php
 require "baglan.php";
 
-// Kullanıcıları çek
-$kullanicilar = $pdo->query("SELECT * FROM kullanicilar ORDER BY id DESC")->fetchAll();
+/* KULLANICI EKLE */
+if(isset($_POST["ekle"])){
 
-// Silme işlemi
-if (isset($_GET['sil_id'])) {
-    $sil_id = $_GET['sil_id'];
+    $isim = $_POST["isim"];
+    $mail = $_POST["mail"];
+    $telefon = $_POST["telefon"];
+    $sifre = $_POST["sifre"];
+
+    $sql = "INSERT INTO kullanicilar
+    (isim, mail, telefon, sifre)
+    VALUES
+    (:isim, :mail, :telefon, :sifre)";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute([
+        "isim" => $isim,
+        "mail" => $mail,
+        "telefon" => $telefon,
+        "sifre" => $sifre
+    ]);
+}
+
+/* GÜNCELLE */
+if(isset($_POST["guncelle"])){
+
+    $id = $_POST["id"];
+    $isim = $_POST["isim"];
+    $mail = $_POST["mail"];
+    $telefon = $_POST["telefon"];
+    $sifre = $_POST["sifre"];
+
+    $sql = "UPDATE kullanicilar SET
+    isim=:isim,
+    mail=:mail,
+    telefon=:telefon,
+    sifre=:sifre
+    WHERE id=:id";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute([
+        "isim" => $isim,
+        "mail" => $mail,
+        "telefon" => $telefon,
+        "sifre" => $sifre,
+        "id" => $id
+    ]);
+}
+
+/* SİL */
+if(isset($_GET["sil_id"])){
+
+    $sil_id = $_GET["sil_id"];
 
     $sql = "DELETE FROM kullanicilar WHERE id = :id";
+
     $stmt = $pdo->prepare($sql);
-    $stmt->execute(['id' => $sil_id]);
+
+    $stmt->execute([
+        "id" => $sil_id
+    ]);
 
     header("Location: kullanicilar.php");
     exit;
 }
+
+/* DÜZENLENE */
+$duzenle = null;
+
+if(isset($_GET["duzenle_id"])){
+
+    $id = $_GET["duzenle_id"];
+
+    $stmt = $pdo->prepare("SELECT * FROM kullanicilar WHERE id=:id");
+
+    $stmt->execute([
+        "id" => $id
+    ]);
+
+    $duzenle = $stmt->fetch();
+}
+
+/* TÜM KULLANICILAR */
+$kullanicilar = $pdo
+->query("SELECT * FROM kullanicilar ORDER BY id DESC")
+->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -27,104 +100,197 @@ if (isset($_GET['sil_id'])) {
 
 <body class="bg-black min-h-screen flex">
 
-<!--SIDEBAR -->
+<!-- SOL MENU -->
 <div class="w-64 bg-gray-900 p-6 flex flex-col">
 
-    <h2 class="text-white text-2xl font-bold mb-8">Admin Panel</h2>
+<h2 class="text-white text-2xl font-bold mb-8">
+Admin Panel
+</h2>
 
-    <nav class="space-y-4">
-        <a href="kullanicilar.php" class="block text-white bg-gray-700 p-2 rounded">
-            Kullanıcılar
-        </a>
+<nav class="space-y-4">
 
-        <a href="admindeneme.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
-            Filmler
-        </a>
+<a href="kullanicilar.php"
+class="block text-white bg-gray-700 p-2 rounded">
+Kullanıcılar
+</a>
 
-        <a href="biletadmin.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
-            Rezervasyonlar
-        </a>
+<a href="admindeneme.php"
+class="block text-gray-300 hover:bg-gray-700 p-2 rounded">
+Filmler
+</a>
 
-          <a href="sikayetler.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
-                Şikayetler
-            </a>
+<a href="biletadmin.php"
+class="block text-gray-300 hover:bg-gray-700 p-2 rounded">
+Rezervasyonlar
+</a>
 
-        <a href="admin.php" class="block text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded">
-            İstatistik
-        </a>
-    </nav>
+<a href="sikayetler.php"
+class="block text-gray-300 hover:bg-gray-700 p-2 rounded">
+Şikayetler
+</a>
 
-    <div class="mt-auto">
-        <a href="anasayfa.php" class="block text-red-400 hover:text-red-300 p-2 rounded mt-8">
-            Çıkış Yap
-        </a>
-    </div>
+<a href="admin.php"
+class="block text-gray-300 hover:bg-gray-700 p-2 rounded">
+İstatistik
+</a>
+
+</nav>
+
+<div class="mt-auto">
+
+<a href="anasayfa.php"
+class="block text-red-400 hover:text-red-300 p-2 rounded mt-8">
+Çıkış Yap
+</a>
 
 </div>
 
-<!-- SAĞ İÇERİK -->
+</div>
+
+<!-- SAĞ -->
 <div class="flex-1 p-10 text-white">
 
-    <!-- ÜST BAR -->
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold"> Kullanıcılar</h1>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
-        <a href="uyeol.php" class="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-            + Yeni Üye
-        </a>
-    </div>
+<!-- FORM -->
+<div class="bg-gray-900 rounded-2xl p-6 shadow-2xl">
 
-    <!-- TABLO -->
-    <div class="bg-gray-900 rounded-2xl shadow-2xl overflow-hidden">
+<h2 class="text-2xl font-bold mb-6">
 
-        <table class="w-full text-left">
+<?php if($duzenle){ ?>
+Kullanıcı Güncelle
+<?php } else { ?>
+Yeni Üye Ekle
+<?php } ?>
 
-            <thead class="bg-gray-800 text-gray-300 uppercase text-sm">
-                <tr>
-                    <th class="p-4">ID</th>
-                    <th class="p-4">İsim</th>
-                    <th class="p-4">Mail</th>
-                    <th class="p-4">Telefon</th>
-                    <th class="p-4">Şifre</th>
-                    <th class="p-4">Sil</th>
-                </tr>
-            </thead>
+</h2>
 
-            <tbody>
+<form method="POST" class="space-y-4">
 
-            <?php foreach ($kullanicilar as $k): ?>
-            <tr class="border-b border-gray-800 hover:bg-gray-800 transition">
+<?php if($duzenle){ ?>
 
-                <td class="p-4"><?= $k["id"] ?></td>
+<input type="hidden"
+name="id"
+value="<?= $duzenle["id"] ?>">
 
-                <td class="p-4 font-semibold"><?= $k["isim"] ?></td>
+<?php } ?>
 
-                <td class="p-4 text-blue-400"><?= $k["mail"] ?></td>
+<input type="text"
+name="isim"
+placeholder="İsim Soyisim"
+value="<?= $duzenle["isim"] ?? '' ?>"
+class="w-full p-3 rounded-lg bg-gray-800 outline-none"
+required>
 
-                <td class="p-4"><?= $k["telefon"] ?></td>
+<input type="email"
+name="mail"
+placeholder="Mail"
+value="<?= $duzenle["mail"] ?? '' ?>"
+class="w-full p-3 rounded-lg bg-gray-800 outline-none"
+required>
 
-                <td class="p-4 text-gray-400"><?= $k["sifre"] ?></td>
+<input type="text"
+name="telefon"
+placeholder="Telefon"
+value="<?= $duzenle["telefon"] ?? '' ?>"
+class="w-full p-3 rounded-lg bg-gray-800 outline-none"
+required>
 
-                <td class="p-4">
-                    <a href="kullanicilar.php?sil_id=<?= $k["id"] ?>"
-                    class="bg-red-600 px-3 py-1 rounded-lg hover:bg-red-700 transition">
-                        Sil
-                    </a>
-                </td>
+<input type="text"
+name="sifre"
+placeholder="Şifre"
+value="<?= $duzenle["sifre"] ?? '' ?>"
+class="w-full p-3 rounded-lg bg-gray-800 outline-none"
+required>
 
-            </tr>
-            <?php endforeach; ?>
+<?php if($duzenle){ ?>
 
-            </tbody>
-        </table>
+<button name="guncelle"
+class="w-full bg-yellow-500 hover:bg-yellow-600 py-3 rounded-lg font-semibold transition">
+Kullanıcıyı Güncelle
+</button>
 
-        <?php if (count($kullanicilar) == 0): ?>
-        <div class="p-10 text-center text-gray-400">
-            Henüz kullanıcı yok 😢
-        </div>
-        <?php endif; ?>
+<?php } else { ?>
 
-    </div>
+<button name="ekle"
+class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition">
+Kullanıcı Ekle
+</button>
+
+<?php } ?>
+
+</form>
+
+</div>
+
+<!-- KULLANICILAR -->
+<div class="bg-gray-900 rounded-2xl p-6 shadow-2xl">
+
+<h2 class="text-2xl font-bold mb-6">
+Kullanıcılar
+</h2>
+
+<div class="space-y-4 max-h-[700px] overflow-y-auto pr-2">
+
+<?php foreach ($kullanicilar as $k): ?>
+
+<div class="bg-gray-800 p-5 rounded-xl">
+
+<div class="flex justify-between items-start">
+
+<div>
+
+<div class="text-xl font-semibold">
+<?= $k["isim"] ?>
+</div>
+
+<div class="text-blue-400 text-sm mt-1">
+<?= $k["mail"] ?>
+</div>
+
+<div class="text-gray-400 text-sm mt-1">
+<?= $k["telefon"] ?>
+</div>
+
+<div class="text-red-400 text-sm mt-2">
+Şifre: <?= $k["sifre"] ?>
+</div>
+
+</div>
+
+<div class="flex gap-2">
+
+<a href="?duzenle_id=<?= $k["id"] ?>"
+class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg transition">
+Düzenle
+</a>
+
+<a href="?sil_id=<?= $k["id"] ?>"
+class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition">
+Sil
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<?php endforeach; ?>
+
+<?php if(count($kullanicilar) == 0){ ?>
+
+<div class="text-center text-gray-400 py-10">
+Henüz kullanıcı yok
+</div>
+
+<?php } ?>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
