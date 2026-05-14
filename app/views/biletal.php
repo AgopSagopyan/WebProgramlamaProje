@@ -16,7 +16,7 @@ if(!isset($_SESSION['kullanici_id'])){
     exit();
 }
 
-/* DOLU KOLTUKLARI ÇEK */
+/* DOLU KOLTUKLAR */
 $doluKoltuklar = [];
 
 $sqlDolu = "SELECT film_id, konum, seans, koltuklar FROM biletler";
@@ -45,7 +45,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
     $film_id = $_POST['film'];
 
-    /* SESSIONDAN ÇEK */
     $isim = $_SESSION['kullanici_isim'];
     $email = $_SESSION['kullanici_email'];
 
@@ -68,7 +67,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
         $adet = count($koltuklarArray);
 
-        /* ÇAKIŞMA */
+        /* ÇAKIŞMA KONTROL */
 
         $sqlCheck = "SELECT koltuklar FROM biletler
         WHERE film_id=? AND konum=? AND seans=?";
@@ -137,19 +136,29 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 }
 
 /* FİLMLER */
+
 $filmler = $baglan->query("
 SELECT * FROM filmler
 ORDER BY film_adi ASC
 ");
+
 ?>
 
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+
 <meta charset="UTF-8">
+
 <title>Bilet Satın Al</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- PANNELLUM -->
+
+<link rel="stylesheet" href="https://pannellum.org/css/pannellum.css"/>
+
+<script src="https://pannellum.org/js/pannellum.js"></script>
 
 <style>
 
@@ -176,7 +185,7 @@ margin-bottom:40px;
 }
 
 .logo{
-font-size:30px;
+font-size:32px;
 font-weight:700;
 color:#ff2a2a;
 }
@@ -184,7 +193,7 @@ color:#ff2a2a;
 .user{
 background:#1a1a1a;
 padding:12px 18px;
-border-radius:10px;
+border-radius:12px;
 }
 
 /* ALERT */
@@ -192,7 +201,7 @@ border-radius:10px;
 .success-box{
 background:#14532d;
 padding:15px;
-border-radius:10px;
+border-radius:12px;
 margin-bottom:25px;
 text-align:center;
 font-weight:600;
@@ -201,7 +210,7 @@ font-weight:600;
 .error-box{
 background:#7f1d1d;
 padding:15px;
-border-radius:10px;
+border-radius:12px;
 margin-bottom:25px;
 text-align:center;
 font-weight:600;
@@ -221,7 +230,7 @@ align-items:flex-start;
 flex:1;
 background:#121212;
 padding:35px;
-border-radius:16px;
+border-radius:20px;
 }
 
 .form-panel h2{
@@ -235,9 +244,10 @@ padding:14px;
 margin-top:15px;
 background:#1d1d1d;
 border:none;
-border-radius:10px;
+border-radius:12px;
 color:white;
 font-size:15px;
+outline:none;
 }
 
 .buy-btn{
@@ -245,7 +255,7 @@ width:100%;
 padding:15px;
 background:#ff2a2a;
 border:none;
-border-radius:10px;
+border-radius:12px;
 color:white;
 font-size:16px;
 font-weight:600;
@@ -258,19 +268,29 @@ transition:.3s;
 background:#e02121;
 }
 
-/* KOLTUK */
+/* KOLTUK PANEL */
 
 .koltuk-panel{
 flex:1;
 background:#121212;
 padding:35px;
-border-radius:16px;
+border-radius:20px;
 }
 
 .koltuk-title{
 text-align:center;
 font-size:28px;
-margin-bottom:20px;
+margin-bottom:25px;
+font-weight:600;
+}
+
+.screen{
+width:100%;
+height:14px;
+background:white;
+border-radius:50px;
+margin-bottom:40px;
+box-shadow:0 0 25px rgba(255,255,255,.8);
 }
 
 .koltuklar{
@@ -278,7 +298,6 @@ display:grid;
 grid-template-columns:repeat(5,60px);
 gap:14px;
 justify-content:center;
-margin-top:20px;
 }
 
 .koltuk{
@@ -288,14 +307,14 @@ background:#2b2b2b;
 display:flex;
 justify-content:center;
 align-items:center;
-border-radius:10px;
+border-radius:12px;
 cursor:pointer;
 transition:.2s;
 font-weight:600;
 }
 
 .koltuk:hover{
-transform:scale(1.06);
+transform:scale(1.08);
 }
 
 .selected{
@@ -306,7 +325,69 @@ background:#ff2a2a !important;
 background:#666 !important;
 cursor:not-allowed;
 pointer-events:none;
-color:#d1d1d1;
+color:#ddd;
+}
+
+/* MODAL */
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.85);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:999;
+backdrop-filter:blur(5px);
+}
+
+.modal-content{
+width:90%;
+max-width:1000px;
+background:#121212;
+padding:20px;
+border-radius:20px;
+position:relative;
+animation:modalAnim .3s ease;
+}
+
+@keyframes modalAnim{
+
+from{
+opacity:0;
+transform:scale(.85);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+}
+
+}
+
+.close-btn{
+position:absolute;
+top:15px;
+right:20px;
+font-size:32px;
+cursor:pointer;
+color:white;
+}
+
+.modal-title{
+font-size:24px;
+font-weight:600;
+margin-bottom:20px;
+}
+
+#panorama{
+width:100%;
+height:500px;
+border-radius:16px;
+overflow:hidden;
 }
 
 /* RESPONSIVE */
@@ -317,9 +398,14 @@ color:#d1d1d1;
 flex-direction:column;
 }
 
+#panorama{
+height:350px;
+}
+
 }
 
 </style>
+
 </head>
 
 <body>
@@ -386,7 +472,7 @@ CineDavud
 
 </select>
 
-<!-- KOLTUK INPUTLARI -->
+<!-- HIDDEN INPUT -->
 
 <div id="hiddenInputs"></div>
 
@@ -405,6 +491,8 @@ Bileti Satın Al
 <div class="koltuk-title">
 Koltuk Seç
 </div>
+
+<div class="screen"></div>
 
 <div class="koltuklar">
 
@@ -434,6 +522,26 @@ foreach($rows as $r){
 
 </div>
 
+<!-- MODAL -->
+
+<div class="modal" id="modal">
+
+<div class="modal-content">
+
+<div class="close-btn" id="closeModal">
+×
+</div>
+
+<div class="modal-title" id="modalTitle">
+🎬 Koltuk Görünümü
+</div>
+
+<div id="panorama"></div>
+
+</div>
+
+</div>
+
 <script>
 
 let doluKoltuklar = <?php echo json_encode($doluKoltuklar); ?>;
@@ -446,9 +554,15 @@ const koltuklar = document.querySelectorAll(".koltuk");
 
 const hiddenInputs = document.getElementById("hiddenInputs");
 
+const modal = document.getElementById("modal");
+const closeModal = document.getElementById("closeModal");
+const modalTitle = document.getElementById("modalTitle");
+
 let secilen = [];
 
-/* DOLU KOLTUKLARI GÜNCELLE */
+let viewer = null;
+
+/* DOLU KOLTUK */
 
 function koltukGuncelle(){
 
@@ -489,13 +603,11 @@ function koltukGuncelle(){
     });
 }
 
-/* SELECT */
-
 film.addEventListener("change", koltukGuncelle);
 konum.addEventListener("change", koltukGuncelle);
 seans.addEventListener("change", koltukGuncelle);
 
-/* KOLTUK */
+/* KOLTUK TIKLAMA */
 
 koltuklar.forEach(k => {
 
@@ -506,6 +618,38 @@ koltuklar.forEach(k => {
         }
 
         const koltukNo = k.dataset.koltuk;
+
+        /* MODAL */
+
+        modal.style.display = "flex";
+
+        modalTitle.innerHTML = `
+        🎬 ${koltukNo} Koltuk Görünümü
+        `;
+
+        /* ESKİ VIEWER TEMİZLE */
+
+        document.getElementById("panorama").innerHTML = "";
+
+        /* YENİ VIEWER */
+
+        viewer = pannellum.viewer('panorama', {
+
+            type: "equirectangular",
+
+            panorama: "uploads/sinema360.jpg",
+
+            autoLoad: true,
+
+            showControls: true,
+
+            compass: false,
+
+            hfov: 110
+
+        });
+
+        /* KOLTUK */
 
         if(k.classList.contains("selected")){
 
@@ -537,7 +681,25 @@ koltuklar.forEach(k => {
     });
 });
 
-/* SAYFA YÜKLENİNCE */
+/* MODAL KAPAT */
+
+closeModal.addEventListener("click", () => {
+
+    modal.style.display = "none";
+
+});
+
+window.addEventListener("click", (e) => {
+
+    if(e.target == modal){
+
+        modal.style.display = "none";
+
+    }
+
+});
+
+/* SAYFA */
 
 koltukGuncelle();
 
