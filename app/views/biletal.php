@@ -99,7 +99,6 @@ $filmler = $baglan->query("SELECT * FROM filmler ORDER BY film_adi ASC");
         .selected{background:#ff2a2a !important;}
         .occupied{background:#666 !important;cursor:not-allowed;pointer-events:none;color:#ddd;}
 
-        /* ENTEGRE EDİLEN YENİ SARMALAYICI VE BUTON DÜZENLEMESİ */
         .panorama-wrapper {
             position: relative;
             width: 100%;
@@ -153,7 +152,7 @@ $filmler = $baglan->query("SELECT * FROM filmler ORDER BY film_adi ASC");
             position: absolute;
             bottom: 20px;
             right: 20px;
-            z-index: 99999; /* Pannellum arayüzünün en üstünde kalması sağlandı */
+            z-index: 99999; 
             padding: 12px 24px;
             font-size: 14px;
             font-weight: bold;
@@ -282,10 +281,16 @@ koltuklar.forEach(k => {
     k.addEventListener("click", () => {
         if(k.classList.contains("occupied")) return;
         
+        // Kullanıcı salon seçmeden koltuğa tıklarsa uyar
+        if(!konum.value){
+            alert("Lütfen önce bir salon seçiniz!");
+            return;
+        }
+
         aktifKoltukNode = k;
         const koltukNo = k.dataset.koltuk;
         
-        popupTitle.innerHTML = `🎬 ${koltukNo} Koltuk Görünümü`;
+        popupTitle.innerHTML = `🎬 ${konum.value} - ${koltukNo} Koltuk Görünümü`;
         
         if(k.classList.contains("selected")){
             modalSecBtn.innerText = "Seçimi Kaldır ❌";
@@ -302,9 +307,15 @@ koltuklar.forEach(k => {
             pViewer = null;
         }
         
+        // Salon seçimine göre gösterilecek resmi ayarlıyoruz
+        let acilacakResim = "sinema360.jpg"; // Varsayılan resim
+        if(konum.value === "Salon 1") acilacakResim = "salon1_360.jpg";
+        else if(konum.value === "Salon 2") acilacakResim = "salon2_360.jpg";
+        else if(konum.value === "Salon 3") acilacakResim = "salon3_360.jpg";
+
         pViewer = pannellum.viewer('panorama', {
             "type": "equirectangular",
-            "panorama": "sinema360.jpg",
+            "panorama": acilacakResim,
             "autoLoad": true
         });
     });
